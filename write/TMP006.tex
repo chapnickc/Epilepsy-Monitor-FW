@@ -1,0 +1,118 @@
+%\documentclass{standalone}
+\usepackage{circuitikz}
+\usepackage{fp}
+
+
+% ************************** multipoles *****************************
+\ctikzset{multipoles/.is family}
+\ctikzset{multipoles/pin spacing/.initial = 5mm} % default value
+
+\pgfkeys{/tikz/pin spacing/.initial = 0mm}
+\pgfkeys{/tikz/pin spacing/.default = 0mm}
+
+\newlength{\TMPlen}  % scale factor
+
+% ***************************** QFP 64 *********************************
+\pgfdeclareshape{TMP006}{
+    \anchor{center}{\pgfpointorigin} % within the node, (0,0) is the center
+
+    % this is used to center the text in the node
+    \anchor{text}{\pgfpoint{-.5\wd\pgfnodeparttextbox}{-7.5\ht\pgfnodeparttextbox}}
+
+    \savedmacro{\resize}{   % called automatically
+        \setlength{\TMPlen}{\pgfkeysvalueof{/tikz/pin spacing}} % from node[]
+        \ifdim\TMPlen=0mm 
+            \setlength{\TMPlen}
+            {\pgfkeysvalueof{/tikz/circuitikz/multipoles/pin spacing}} 
+        \fi    % from \ctikzset{}
+    }
+
+
+\savedanchor\icpinla{\pgfpoint{-3 \TMPlen}{3.5\TMPlen}}  % pin 1
+\anchor{p1}{\icpinla}
+\savedanchor\icpinlb{\pgfpoint{-2\TMPlen}{3.5\TMPlen}}  % pin 2
+\anchor{p2}{\icpinlb}
+\savedanchor\icpinlc{\pgfpoint{-1\TMPlen}{3.5\TMPlen}}  % pin 3
+\anchor{p3}{\icpinlc}
+\savedanchor\icpinld{\pgfpoint{-0\TMPlen}{3.5\TMPlen}}  % pin 4
+\anchor{p4}{\icpinld}
+\savedanchor\icpinle{\pgfpoint{1\TMPlen}{3.5\TMPlen}}  % pin 5
+\anchor{p5}{\icpinle}
+\savedanchor\icpinlf{\pgfpoint{2\TMPlen}{3.5\TMPlen}}  % pin 6
+\anchor{p6}{\icpinlf}
+\savedanchor\icpinlg{\pgfpoint{3\TMPlen}{3.5\TMPlen}}  % pin 6
+\anchor{p7}{\icpinlg}
+
+
+\foregroundpath{ % border and pin numbers are drawn here
+    \pgfsetlinewidth{0.1\TMPlen}
+    \def\ICheight{8.5}
+    \def\ICwidth{8}
+
+    \def\halfh{4.25} 
+    \def\halfw{4} 
+    
+    \def\topLim{4}
+    \def\bottomLim{-4}
+    \def\leftLim{-4}
+    \def\rightLim{4}
+
+    \pgfpathmoveto{\pgfpoint{\leftLim \TMPlen}{\halfh \TMPlen}}
+    \pgfpathlineto{\pgfpoint{\rightLim \TMPlen}{\halfh \TMPlen}}
+    \pgfpathlineto{\pgfpoint{\halfw \TMPlen}{\topLim \TMPlen}}
+    \pgfpathlineto{\pgfpoint{\halfw \TMPlen}{\bottomLim \TMPlen}}
+    \pgfpathlineto{\pgfpoint{\rightLim \TMPlen}{-\halfh \TMPlen}}
+    \pgfpathlineto{\pgfpoint{\leftLim \TMPlen}{-\halfh \TMPlen}}
+    \pgfpathlineto{\pgfpoint{-\halfw \TMPlen}{\bottomLim \TMPlen}}
+    \pgfpathlineto{\pgfpoint{-\halfw \TMPlen}{\topLim \TMPlen}}
+    \pgfpathclose
+
+
+ \pgfusepath{draw}  %draw holes
+ \pgfsetlinewidth{0.06\TMPlen}
+
+ \pgfpathcircle{\pgfpoint{-3\TMPlen}{3.5\TMPlen}}{0.3\TMPlen}
+ \pgfpathcircle{\pgfpoint{-2\TMPlen}{3.5\TMPlen}}{0.3\TMPlen}
+ \pgfpathcircle{\pgfpoint{-1\TMPlen}{3.5\TMPlen}}{0.3\TMPlen}
+ \pgfpathcircle{\pgfpoint{-0\TMPlen}{3.5\TMPlen}}{0.3\TMPlen}
+ \pgfpathcircle{\pgfpoint{1\TMPlen}{3.5\TMPlen}}{0.3\TMPlen}
+ \pgfpathcircle{\pgfpoint{2\TMPlen}{3.5\TMPlen}}{0.3\TMPlen}
+ \pgfpathcircle{\pgfpoint{3\TMPlen}{3.5\TMPlen}}{0.3\TMPlen}
+
+
+ \pgfusepath{draw}  %draw pin labels
+ \pgftext[at=\pgfpoint{-3\TMPlen}{2.2\TMPlen}, rotate=90]{\scriptsize GND}
+ \pgftext[at=\pgfpoint{-2\TMPlen}{2.1\TMPlen}, rotate=90]{\scriptsize ADR0}
+ \pgftext[at=\pgfpoint{-1\TMPlen}{2.1\TMPlen}, rotate=90]{\scriptsize ADR1}
+ \pgftext[at=\pgfpoint{0\TMPlen}{2\TMPlen}, rotate=90]{\scriptsize DRDY}
+ \pgftext[at=\pgfpoint{1\TMPlen}{2.25\TMPlen}, rotate=90]{\scriptsize SDA}
+ \pgftext[at=\pgfpoint{2\TMPlen}{2.25\TMPlen}, rotate=90]{\scriptsize SCL}
+ \pgftext[at=\pgfpoint{3\TMPlen}{2.25\TMPlen}, rotate=90]{\scriptsize $V_{CC}$}
+
+
+	\pgfpathmoveto{\pgfpoint{-0.25cm}{0cm}} 
+	\pgfpathlineto{\pgfpoint{0.25cm}{0cm}} 
+	\pgfpathlineto{\pgfpoint{0.25cm}{-0.5cm}} 
+	\pgfpathlineto{\pgfpoint{-0.25cm}{-0.5cm}} 
+	\pgfpathclose
+	\pgfusepath{fill} 
+
+ 	\pgfsetlinewidth{1.5mm} 	
+	\pgfpathmoveto{\pgfpoint{-0.6cm}{0.3cm}} 
+	\pgfpathlineto{\pgfpoint{0.6cm}{0.3cm}} 
+	\pgfpathlineto{\pgfpoint{0.6cm}{-0.8cm}} 
+	\pgfpathlineto{\pgfpoint{-0.6cm}{-0.8cm}} 
+	\pgfpathclose
+
+	\pgfsetstrokeopacity{0.30} 
+	\pgfusepath{stroke} 
+
+}}
+
+%\begin{document}
+%\begin{circuitikz}
+    %\node[TMP006, pin spacing=5mm] (TMP) at (0,0) {\textbf{TMP006}};
+%\end{circuitikz}
+%\end{document}
+
+
