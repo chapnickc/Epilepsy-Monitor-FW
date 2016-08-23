@@ -41,7 +41,7 @@ LINKER_SCRIPT = .././mbed/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/NRF51822.ld
 SOFTDEVICE = .././mbed/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/s130_nrf51822_1_0_0/s130_nrf51_1.0.0_softdevice.hex
 
 
-############################################################################### 
+#----------------------------------------------------------------------
 AS      = $(GCC_BIN)arm-none-eabi-as
 CC      = $(GCC_BIN)arm-none-eabi-gcc
 CPP     = $(GCC_BIN)arm-none-eabi-g++
