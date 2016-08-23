@@ -208,7 +208,6 @@ CC_SYMBOLS = -DDEVICE_ERROR_PATTERN=1 -DNRF51 -DTARGET_MCU_NRF51_16K_S130 -DTARG
 
 LD_FLAGS =-Wl,--gc-sections -Wl,--wrap,main -Wl,--wrap,_malloc_r -Wl,--wrap,_free_r -Wl,--wrap,_realloc_r -mcpu=cortex-m0 -mthumb --specs=nano.specs 
 LD_FLAGS += -u _printf_float -u _scanf_float
-#LD_FLAGS += -Wl,-u,_printf_float,-u,_scanf_float
 LD_SYS_LIBS = -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys
 
 
