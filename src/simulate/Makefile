@@ -74,13 +74,6 @@ OBJECTS = $(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_ra
 		  $(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/util/sdk_mapped_flags.o \
 		  $(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/softdevice/common/softdevice_handler/softdevice_handler.o \
 		  $(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/softdevice/common/softdevice_handler/softdevice_handler_appsh.o \
-		  ./main.o \
-		  $(BLE_API_SRC_PATH)/source/BLE.o \
-		  $(BLE_API_SRC_PATH)/source/DiscoveredCharacteristic.o \
-		  $(BLE_API_SRC_PATH)/source/GapScanningParams.o \
-		  $(BLE_API_SRC_PATH)/source/services/DFUService.o \
-		  $(BLE_API_SRC_PATH)/source/services/UARTService.o \
-		  $(BLE_API_SRC_PATH)/source/services/URIBeaconConfigService.o \
 		  $(nRF51822_SRC_PATH)/source/nRF5xCharacteristicDescriptorDiscoverer.o \
 		  $(nRF51822_SRC_PATH)/source/nRF5xDiscoveredCharacteristic.o \
 		  $(nRF51822_SRC_PATH)/source/nRF5xGap.o \
@@ -94,9 +87,82 @@ OBJECTS = $(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_ra
 		  $(nRF51822_SRC_PATH)/source/btle/btle_gap.o \
 		  $(nRF51822_SRC_PATH)/source/btle/btle_security.o \
 		  $(nRF51822_SRC_PATH)/source/btle/custom/custom_helper.o \
-		  $(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/common/ble_conn_params.o 
-SYS_OBJECTS = $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/cmsis_nvic.o $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/mbed_board.o $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/retarget.o $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/startup_NRF51822.o $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/system_nrf51.o 
-INCLUDE_PATHS = -I../../lib -I../. -I$(BLE_API_SRC_PATH) -I$(BLE_API_SRC_PATH)/ble -I$(BLE_API_SRC_PATH)/ble/services -I$(BLE_API_SRC_PATH)/source -I$(BLE_API_SRC_PATH)/source/services -I$(nRF51822_SRC_PATH) -I$(nRF51822_SRC_PATH)/source -I$(nRF51822_SRC_PATH)/source/btle -I$(nRF51822_SRC_PATH)/source/btle/custom -I$(nRF51822_SRC_PATH)/source/common -I$(nRF51822_SRC_PATH)/nrf51-sdk -I$(nRF51822_SRC_PATH)/nrf51-sdk/source -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_radio_notification -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services/ble_dfu -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/common -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/device_manager -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/device_manager/config -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/device -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/ble_flash -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/delay -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/hal -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/pstorage -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/pstorage/config -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/bootloader_dfu -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/bootloader_dfu/hci_transport -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/crc16 -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/experimental_section_vars -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/fds -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/fstorage -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/hci -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/scheduler -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/timer -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/util -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/softdevice -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/softdevice/common -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/softdevice/common/softdevice_handler -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/softdevice/s130 -I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/softdevice/s130/headers -I$(nRF51822_SRC_PATH)/bootloader -I$(MBED_SRC_PATH) -I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO -I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC -I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822 -I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib -I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk -I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components -I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components/libraries -I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components/libraries/crc16 -I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components/libraries/scheduler -I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components/libraries/util -I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/s110_nrf51822_8_0_0 -I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/s130_nrf51822_1_0_0 -I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/TARGET_RBLAB_BLENANO -I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM 
+		  $(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/common/ble_conn_params.o \
+		  $(BLE_API_SRC_PATH)/source/BLE.o \
+		  $(BLE_API_SRC_PATH)/source/DiscoveredCharacteristic.o \
+		  $(BLE_API_SRC_PATH)/source/GapScanningParams.o \
+		  $(BLE_API_SRC_PATH)/source/services/DFUService.o \
+		  $(BLE_API_SRC_PATH)/source/services/UARTService.o \
+		  $(BLE_API_SRC_PATH)/source/services/URIBeaconConfigService.o \
+		  ./main.o
+SYS_OBJECTS = $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/cmsis_nvic.o \
+			  $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/mbed_board.o \
+			  $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/retarget.o \
+			  $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/startup_NRF51822.o \
+			  $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/system_nrf51.o 
+INCLUDE_PATHS = -I../../lib \
+				-I../. \
+				-I$(BLE_API_SRC_PATH) \
+				-I$(BLE_API_SRC_PATH)/ble \
+				-I$(BLE_API_SRC_PATH)/ble/services \
+				-I$(BLE_API_SRC_PATH)/source \
+				-I$(BLE_API_SRC_PATH)/source/services \
+				-I$(nRF51822_SRC_PATH) \
+				-I$(nRF51822_SRC_PATH)/source \
+				-I$(nRF51822_SRC_PATH)/source/btle \
+				-I$(nRF51822_SRC_PATH)/source/btle/custom \
+				-I$(nRF51822_SRC_PATH)/source/common \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_radio_notification \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services/ble_dfu \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/common \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/device_manager \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/device_manager/config \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/device \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/ble_flash \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/delay \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/hal \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/pstorage \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/pstorage/config \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/bootloader_dfu \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/bootloader_dfu/hci_transport \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/crc16 \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/experimental_section_vars \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/fds \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/fstorage \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/hci \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/scheduler \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/timer \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/util \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/softdevice \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/softdevice/common \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/softdevice/common/softdevice_handler \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/softdevice/s130 \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/softdevice/s130/headers \
+				-I$(nRF51822_SRC_PATH)/bootloader \
+				-I$(MBED_SRC_PATH) \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822 \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components/libraries \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components/libraries/crc16 \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components/libraries/scheduler \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components/libraries/util \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/s110_nrf51822_8_0_0 \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/s130_nrf51822_1_0_0 \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/TARGET_RBLAB_BLENANO \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM 
 LIBRARY_PATHS = -L$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM 
 LIBRARIES = -lmbed 
 LINKER_SCRIPT = $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/NRF51822.ld
@@ -182,5 +248,8 @@ DEPS = $(OBJECTS:.o=.d) $(SYS_OBJECTS:.o=.d)
 
 merge:
 	$(SREC_CAT) $(SOFTDEVICE) -intel $(PROJECT).hex -intel -o combined.hex -intel --line-length=44
+
+upload:
+	cp combined.hex /Volumes/MBED 
 
 endif
