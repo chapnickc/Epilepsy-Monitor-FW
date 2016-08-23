@@ -19,13 +19,12 @@ float avg_peak_interval(std::vector<uint8_t> peak_ixs, float T){
     *  containg the indicies that correspond to peak values 
     *  in the signal vector.
     */
-
     std::vector<float> tp;
-    std::vector<float> ds;                       // contains distance between elements 
-    uint8_t i;              // index
+    std::vector<float> ds;                      // contains distance between elements 
+    uint8_t i;                                  // index
 
-    // calculate the time at even peaks
-    for(i=0; i < peak_ixs.size(); i++){
+    
+    for(i=0; i < peak_ixs.size(); i++){         // calculate the time at even peaks
         if(i % 2 == 0) {
             float t = peak_ixs[i] * T;
             tp.push_back(t);

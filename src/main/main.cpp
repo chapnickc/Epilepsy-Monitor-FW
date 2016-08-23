@@ -49,7 +49,7 @@ int main(void)
         for(i=0; i < samples; i++){
             sensor.readSensor();
             IR_data[i] = (float) sensor.IR;
-            wait(T);                 // will take 5.00 seconds
+            wait(T);                            // will take 5.00 seconds
         }
         
         ixs = find_peaks(IR_data, m, dt);   // get the peak indicies

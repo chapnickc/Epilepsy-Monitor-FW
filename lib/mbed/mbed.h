@@ -16,8 +16,17 @@
 #ifndef MBED_H
 #define MBED_H
 
-#define MBED_LIBRARY_VERSION 117
+#define MBED_LIBRARY_VERSION 124
 
+#if MBED_CONF_RTOS_PRESENT
+#include "rtos/rtos.h"
+#endif
+
+#if MBED_CONF_NSAPI_PRESENT
+#include "network-socket/nsapi.h"
+#endif
+
+#include "toolchain.h"
 #include "platform.h"
 
 // Useful C libraries
@@ -27,6 +36,7 @@
 // mbed Debug libraries
 #include "mbed_error.h"
 #include "mbed_interface.h"
+#include "mbed_assert.h"
 
 // mbed Peripheral components
 #include "DigitalIn.h"
@@ -62,6 +72,10 @@
 #include "wait_api.h"
 #include "sleep_api.h"
 #include "rtc_time.h"
+
+// mbed Non-hardware components
+#include "Callback.h"
+#include "FunctionPointer.h"
 
 using namespace mbed;
 using namespace std;

@@ -21,6 +21,7 @@
 #if DEVICE_LOCALFILESYSTEM
 
 #include "FileSystemLike.h"
+#include "PlatformMutex.h"
 
 namespace mbed {
 
@@ -46,8 +47,11 @@ public:
     virtual off_t flen();
 
 protected:
+    virtual void lock();
+    virtual void unlock();
     FILEHANDLE _fh;
     int pos;
+    PlatformMutex _mutex;
 };
 
 /** A filesystem for accessing the local mbed Microcontroller USB disk drive
@@ -55,6 +59,8 @@ protected:
  *  This allows programs to read and write files on the same disk drive that is used to program the
  *  mbed Microcontroller. Once created, the standard C file access functions are used to open,
  *  read and write files.
+ *
+ * @Note Synchronization level: Thread safe
  *
  * Example:
  * @code
@@ -85,6 +91,7 @@ protected:
  *  not exit, you will need to hold down reset on the mbed Microcontroller to be able to see the drive again!
  */
 class LocalFileSystem : public FileSystemLike {
+    // No modifiable state
 
 public:
     LocalFileSystem(const char* n) : FileSystemLike(n) {

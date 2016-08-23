@@ -21,6 +21,8 @@
 #if DEVICE_I2C
 
 #include "i2c_api.h"
+#include "SingletonPtr.h"
+#include "PlatformMutex.h"
 
 #if DEVICE_I2C_ASYNCH
 #include "CThunk.h"
@@ -31,6 +33,8 @@
 namespace mbed {
 
 /** An I2C Master, used for communicating with I2C slave devices
+ *
+ * @Note Synchronization level: Thread safe
  *
  * Example:
  * @code
@@ -135,6 +139,18 @@ public:
      */
     void stop(void);
 
+    /** Acquire exclusive access to this I2C bus
+     */
+    virtual void lock(void);
+
+    /** Release exclusive access to this I2C bus
+     */
+    virtual void unlock(void);
+
+    virtual ~I2C() {
+        // Do nothing
+    }
+
 #if DEVICE_I2C_ASYNCH
 
     /** Start non-blocking I2C transfer.
@@ -167,6 +183,7 @@ protected:
     i2c_t _i2c;
     static I2C  *_owner;
     int         _hz;
+    static SingletonPtr<PlatformMutex> _mutex;
 };
 
 } // namespace mbed
