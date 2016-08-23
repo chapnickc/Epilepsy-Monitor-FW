@@ -37,15 +37,14 @@ MAX30100_SRC_PATH = ../../../lib/MAX30100
 HR_FUNCS_SRC_PATH = ../../../lib/HR_functions
 
 nRF51822_OBJ_DIR = ./nRF51822
-#MBED_OBJ_DIR 	  = ./mbed
+MBED_OBJ_DIR 	 = ./mbed
 BLE_API_OBJ_DIR  = ./BLE_API
-MAX30100_OBJ_DIR = ./MAX30100
 TMP006_OBJ_DIR   = ./TMP006
+MAX30100_OBJ_DIR = ./MAX30100
 HR_FUNCS_OBJ_DIR = ./HR_functions
 
 
-
-VPATH = .. 
+VPATH = ../../../lib : ..
 
 GCC_BIN = ../../../tools/arm/gcc-arm-none-eabi-4_9-2015q3/bin/
 PROJECT = EM_simulate
@@ -212,7 +211,6 @@ endif
 .PHONY: all lst size
 
 all: $(PROJECT).bin $(PROJECT).hex size
-
 
 
 .asm.o:
