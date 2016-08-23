@@ -1,53 +1,64 @@
-/* mbed Microcontroller Library
- * Copyright (c) 2006-2015 ARM Limited
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
+#include <vector>
 
 #include "mbed.h"
+#include "TMP006.h"
 #include "ble/BLE.h"
 #include "ble/services/HeartRateService.h"
+#include "ble/services/HealthThermometerService.h"
 #include "ble/services/BatteryService.h"
 #include "ble/services/DeviceInformationService.h"
 
-DigitalOut led1(LED1);
+#define I2C_SDA     p4
+#define I2C_SCL     p5
 
-const static char     DEVICE_NAME[]        = "HRM1";
-static const uint16_t uuid16_list[]        = {GattService::UUID_HEART_RATE_SERVICE,
-                                              GattService::UUID_DEVICE_INFORMATION_SERVICE};
+#define tempSensorAddress         0x80     // I2C address of TMP006, can be 0x40-0x47
+//int max30100_addr = 0xAE;
+
+
+const static char     DEVICE_NAME[]         = "EpilepsyMonitor";
+
+static const uint16_t uuid16_list[]         = { GattService::UUID_HEART_RATE_SERVICE,
+                                                GattService::UUID_HEALTH_THERMOMETER_SERVICE,
+                                                GattService::UUID_BATTERY_SERVICE,
+                                                GattService::UUID_DEVICE_INFORMATION_SERVICE};
+
+
 static volatile bool  triggerSensorPolling = false;
 
-uint8_t hrmCounter = 100; // init HRM to 100bps
 
+/* Initialize Simulation Variables */
+float tempCounter = 100;     
+uint8_t hrmCounter = 100;     
+uint8_t batteryLevel = 50;
+//uint16_t samples = TMP006_CFG_2SAMPLE;
+
+
+DigitalOut led1(LED1);
+
+/* Instantiate Sensor Objects */
+//TMP006 healthThermometer(I2C_SDA, I2C_SCL, tempSensorAddress); 
+//MAX30100 sensor(I2C_SDA, I2C_SCL, max30100_addr);
+
+/* Instantiate Services */
 HeartRateService         *hrService;
+HealthThermometerService *thermService;
+BatteryService           *batteryService;
 DeviceInformationService *deviceInfo;
 
-void disconnectionCallback(const Gap::DisconnectionCallbackParams_t *params)
-{
+void disconnectionCallback(const Gap::DisconnectionCallbackParams_t *params){
     BLE::Instance(BLE::DEFAULT_INSTANCE).gap().startAdvertising(); // restart advertising
 }
 
-void periodicCallback(void)
-{
-    led1 = !led1; /* Do blinky on LED1 while we're waiting for BLE events */
-
-    /* Note that the periodicCallback() executes in interrupt context, so it is safer to do
-     * heavy-weight sensor polling from the main thread. */
+void periodicCallback(void){   
+    /* This function executes in interrupt context, so we trigger
+     * "heavy-weight" sensor polling to run in the main thread. 
+     */
+    led1 = !led1;                                   /*  blink LED1 while waiting for BLE events */
     triggerSensorPolling = true;
 }
 
-void bleInitComplete(BLE::InitializationCompleteCallbackContext *params)
-{
+void bleInitComplete(BLE::InitializationCompleteCallbackContext *params){
     BLE &ble          = params->ble;
     ble_error_t error = params->error;
 
@@ -57,24 +68,29 @@ void bleInitComplete(BLE::InitializationCompleteCallbackContext *params)
 
     ble.gap().onDisconnection(disconnectionCallback);
 
-    /* Setup primary service. */
+    /* Initialize Services */
     hrService = new HeartRateService(ble, hrmCounter, HeartRateService::LOCATION_FINGER);
-
-    /* Setup auxiliary service. */
+    thermService = new HealthThermometerService(ble, tempCounter, HealthThermometerService::LOCATION_BODY);
+  
+    batteryService = new BatteryService(ble, batteryLevel);
     deviceInfo = new DeviceInformationService(ble, "ARM", "Model1", "SN1", "hw-rev1", "fw-rev1", "soft-rev1");
 
     /* Setup advertising. */
     ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::BREDR_NOT_SUPPORTED | GapAdvertisingData::LE_GENERAL_DISCOVERABLE);
     ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::COMPLETE_LIST_16BIT_SERVICE_IDS, (uint8_t *)uuid16_list, sizeof(uuid16_list));
     ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::GENERIC_HEART_RATE_SENSOR);
+    ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::GENERIC_THERMOMETER);
+//    ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::PULSE_OXIMETER_GENERIC);
+
     ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::COMPLETE_LOCAL_NAME, (uint8_t *)DEVICE_NAME, sizeof(DEVICE_NAME));
     ble.gap().setAdvertisingType(GapAdvertisingParams::ADV_CONNECTABLE_UNDIRECTED);
     ble.gap().setAdvertisingInterval(1000); /* 1000ms */
     ble.gap().startAdvertising();
 }
 
-int main(void)
-{
+
+int main(void){
+
     led1 = 1;
     Ticker ticker;
     ticker.attach(periodicCallback, 1); // blink LED every second
@@ -82,25 +98,38 @@ int main(void)
     BLE& ble = BLE::Instance(BLE::DEFAULT_INSTANCE);
     ble.init(bleInitComplete);
 
-    /* SpinWait for initialization to complete. This is necessary because the
-     * BLE object is used in the main loop below. */
-    while (ble.hasInitialized()  == false) { /* spin loop */ }
+    while (ble.hasInitialized()  == false){
+        /* SpinWait for initialization to complete, since the
+         * BLE object is used in the main loop below. 
+         */
+    }
 
-    // infinite loop
-    while (1) {
+    while (true) {
         // check for trigger from periodicCallback()
         if (triggerSensorPolling && ble.getGapState().connected) {
             triggerSensorPolling = false;
 
-            // Do blocking calls or whatever is necessary for sensor polling.
-            // In our case, we simply update the HRM measurement.
+            /* Do blocking calls as necessary for sensor polling. */
             hrmCounter++;
             if (hrmCounter == 180) { //  100 <= HRM bps <=175
                 hrmCounter = 100;
             }
 
+            tempCounter++;
+            if (tempCounter == 212) {
+                tempCounter = 5;
+            }
+
+            batteryLevel++;
+            if (batteryLevel > 100) {
+                batteryLevel = 20;
+            }
+
             hrService->updateHeartRate(hrmCounter);
-        } else {
+            thermService->updateTemperature(tempCounter);
+            batteryService->updateBatteryLevel(batteryLevel);
+        } 
+        else {
             ble.waitForEvent(); // low power wait for event
         }
     }
