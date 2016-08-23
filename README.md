@@ -34,7 +34,3 @@ This file that has been merged with the softdevice from the second command.
 
 
 
-
-
-
-

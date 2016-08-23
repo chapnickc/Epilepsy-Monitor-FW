@@ -28,20 +28,166 @@ clean :
 
 else
 
-VPATH = .. 
+# Imports are relative to the '.build' directory created in the current directory
+nRF51822_SRC_PATH = ../../../lib/nRF51822
+MBED_SRC_PATH 	  = ../../../lib/mbed
+BLE_API_SRC_PATH  = ../../../lib/BLE_API
+TMP006_SRC_PATH   = ../../../lib/TMP006
+MAX30100_SRC_PATH = ../../../lib/MAX30100
+HR_FUNCS_SRC_PATH = ../../../lib/HR_functions
 
-GCC_BIN = ~/repos/Epilepsy-Monitor-FW/tools/arm/gcc-arm-none-eabi-4_9-2015q3/bin/
-PROJECT = EpilepsyMonitor
-OBJECTS = ./main.o ./MAX30100/MAX30100.o ./HR_functions/HR_functions.o 
-SYS_OBJECTS = ./mbed/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/board.o ./mbed/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/cmsis_nvic.o ./mbed/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/retarget.o ./mbed/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/startup_NRF51822.o ./mbed/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/system_nrf51.o 
-INCLUDE_PATHS = -I../. -I.././MAX30100 -I.././HR_functions -I.././mbed -I.././mbed/TARGET_RBLAB_BLENANO -I.././mbed/TARGET_RBLAB_BLENANO/TARGET_NORDIC -I.././mbed/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822 -I.././mbed/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib -I.././mbed/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk -I.././mbed/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components -I.././mbed/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components/libraries -I.././mbed/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components/libraries/crc16 -I.././mbed/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components/libraries/scheduler -I.././mbed/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components/libraries/util -I.././mbed/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/s110_nrf51822_8_0_0 -I.././mbed/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/s130_nrf51822_1_0_0 -I.././mbed/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/TARGET_RBLAB_BLENANO -I.././mbed/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM 
-LIBRARY_PATHS = -L.././mbed/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM 
+nRF51822_OBJ_DIR = ./nRF51822
+MBED_OBJ_DIR 	 = ./mbed
+BLE_API_OBJ_DIR  = ./BLE_API
+TMP006_OBJ_DIR   = ./TMP006
+MAX30100_OBJ_DIR = ./MAX30100
+HR_FUNCS_OBJ_DIR = ./HR_functions
+
+
+VPATH = ../../../lib : ..
+
+GCC_BIN = ../../../tools/arm/gcc-arm-none-eabi-4_9-2015q3/bin/
+PROJECT = EM_simulate
+OBJECTS = $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/ble_radio_notification/ble_radio_notification.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services/ble_dfu/ble_dfu.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/common/ble_advdata.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/common/ble_conn_state.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/common/ble_srv_common.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/device_manager/device_manager_peripheral.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/id_manager.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/peer_data.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/peer_data_storage.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/peer_database.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/peer_id.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/pm_buffer.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/pm_mutex.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/ble_flash/ble_flash.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/delay/nrf_delay.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/hal/nrf_ecb.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/hal/nrf_nvmc.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/pstorage/pstorage.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/libraries/bootloader_dfu/bootloader_util.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/libraries/bootloader_dfu/dfu_app_handler.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/libraries/bootloader_dfu/dfu_init_template.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/libraries/crc16/crc16.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/libraries/fds/fds.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/libraries/fstorage/fstorage.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/libraries/fstorage/fstorage_nosd.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/libraries/hci/hci_mem_pool.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/libraries/scheduler/app_scheduler.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/libraries/util/app_error.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/libraries/util/app_util_platform.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/libraries/util/nrf_assert.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/libraries/util/sdk_mapped_flags.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/softdevice/common/softdevice_handler/softdevice_handler.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/softdevice/common/softdevice_handler/softdevice_handler_appsh.o \
+		  $(nRF51822_OBJ_DIR)/source/nRF5xCharacteristicDescriptorDiscoverer.o \
+		  $(nRF51822_OBJ_DIR)/source/nRF5xDiscoveredCharacteristic.o \
+		  $(nRF51822_OBJ_DIR)/source/nRF5xGap.o \
+		  $(nRF51822_OBJ_DIR)/source/nRF5xGattClient.o \
+		  $(nRF51822_OBJ_DIR)/source/nRF5xGattServer.o \
+		  $(nRF51822_OBJ_DIR)/source/nRF5xServiceDiscovery.o \
+		  $(nRF51822_OBJ_DIR)/source/nRF5xn.o \
+		  $(nRF51822_OBJ_DIR)/source/btle/btle.o \
+		  $(nRF51822_OBJ_DIR)/source/btle/btle_advertising.o \
+		  $(nRF51822_OBJ_DIR)/source/btle/btle_discovery.o \
+		  $(nRF51822_OBJ_DIR)/source/btle/btle_gap.o \
+		  $(nRF51822_OBJ_DIR)/source/btle/btle_security.o \
+		  $(nRF51822_OBJ_DIR)/source/btle/custom/custom_helper.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/common/ble_conn_params.o \
+		  $(BLE_API_OBJ_DIR)/source/BLE.o \
+		  $(BLE_API_OBJ_DIR)/source/DiscoveredCharacteristic.o \
+		  $(BLE_API_OBJ_DIR)/source/GapScanningParams.o \
+		  $(BLE_API_OBJ_DIR)/source/services/DFUService.o \
+		  $(BLE_API_OBJ_DIR)/source/services/UARTService.o \
+		  $(BLE_API_OBJ_DIR)/source/services/URIBeaconConfigService.o \
+		  $(TMP006_OBJ_DIR)/TMP006.o \
+		  $(MAX30100_OBJ_DIR)/MAX30100.o \
+		  $(HR_FUNCS_OBJ_DIR)/HR_functions.o \
+		  ./main.o
+
+
+SYS_OBJECTS = $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/cmsis_nvic.o \
+			  $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/mbed_board.o \
+			  $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/retarget.o \
+			  $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/startup_NRF51822.o \
+			  $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/system_nrf51.o 
+
+INCLUDE_PATHS = -I../../../lib \
+				-I$(BLE_API_SRC_PATH) \
+				-I$(BLE_API_SRC_PATH)/ble \
+				-I$(BLE_API_SRC_PATH)/ble/services \
+				-I$(BLE_API_SRC_PATH)/source \
+				-I$(BLE_API_SRC_PATH)/source/services \
+				-I$(nRF51822_SRC_PATH) \
+				-I$(nRF51822_SRC_PATH)/source \
+				-I$(nRF51822_SRC_PATH)/source/btle \
+				-I$(nRF51822_SRC_PATH)/source/btle/custom \
+				-I$(nRF51822_SRC_PATH)/source/common \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_radio_notification \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services/ble_dfu \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/common \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/device_manager \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/device_manager/config \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/device \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/ble_flash \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/delay \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/hal \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/pstorage \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/pstorage/config \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/bootloader_dfu \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/bootloader_dfu/hci_transport \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/crc16 \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/experimental_section_vars \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/fds \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/fstorage \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/hci \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/scheduler \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/timer \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/libraries/util \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/softdevice \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/softdevice/common \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/softdevice/common/softdevice_handler \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/softdevice/s130 \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/softdevice/s130/headers \
+				-I$(nRF51822_SRC_PATH)/bootloader \
+				-I$(MBED_SRC_PATH) \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822 \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components/libraries \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components/libraries/crc16 \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components/libraries/scheduler \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/nordic_sdk/components/libraries/util \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/s110_nrf51822_8_0_0 \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/s130_nrf51822_1_0_0 \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/TARGET_RBLAB_BLENANO \
+				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM \
+				-I$(TMP006_SRC_PATH) \
+				-I$(MAX30100_SRC_PATH) \
+				-I$(HR_FUNCS_SRC_PATH)
+
+LIBRARY_PATHS = -L$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM 
 LIBRARIES = -lmbed 
-LINKER_SCRIPT = .././mbed/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/NRF51822.ld
-SOFTDEVICE = .././mbed/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/s130_nrf51822_1_0_0/s130_nrf51_1.0.0_softdevice.hex
+LINKER_SCRIPT = $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/NRF51822.ld
+SOFTDEVICE = $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/Lib/s130_nrf51822_1_0_0/s130_nrf51_1.0.0_softdevice.hex
 
 
-#----------------------------------------------------------------------
+#------------------------------------------------------------ 
+#					Compiler Info
+#------------------------------------------------------------ 
 AS      = $(GCC_BIN)arm-none-eabi-as
 CC      = $(GCC_BIN)arm-none-eabi-gcc
 CPP     = $(GCC_BIN)arm-none-eabi-g++
@@ -51,15 +197,18 @@ OBJDUMP = $(GCC_BIN)arm-none-eabi-objdump
 SIZE    = $(GCC_BIN)arm-none-eabi-size
 SREC_CAT = srec_cat
  
-
-
+# ---------------------------
+#		Compiler Flags
+#----------------------------
 CPU = -mcpu=cortex-m0 -mthumb 
-CC_FLAGS = -c -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -fmessage-length=0 -fno-exceptions -fno-builtin -ffunction-sections -fdata-sections -funsigned-char -MMD -fno-delete-null-pointer-checks -fomit-frame-pointer -mcpu=cortex-m0 -mthumb -Os -std=gnu11 -include mbed_config.h -MMD -MP
+CC_FLAGS = -c -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -fmessage-length=0 -fno-exceptions -fno-builtin -ffunction-sections -fdata-sections -funsigned-char -MMD -fno-delete-null-pointer-checks -fomit-frame-pointer -mcpu=cortex-m0 -mthumb -Os -std=gnu99 -include mbed_config.h -MMD -MP
 CPPC_FLAGS = -c -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -fmessage-length=0 -fno-exceptions -fno-builtin -ffunction-sections -fdata-sections -funsigned-char -MMD -fno-delete-null-pointer-checks -fomit-frame-pointer -mcpu=cortex-m0 -mthumb -Os -std=gnu++11 -fno-rtti -Wvla -include mbed_config.h -MMD -MP
 ASM_FLAGS = -x assembler-with-cpp -c -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -fmessage-length=0 -fno-exceptions -fno-builtin -ffunction-sections -fdata-sections -funsigned-char -MMD -fno-delete-null-pointer-checks -fomit-frame-pointer -mcpu=cortex-m0 -mthumb -Os
-CC_SYMBOLS = -DMBED_BUILD_TIMESTAMP=1470241579.07 -DDEVICE_ERROR_PATTERN=1 -DNRF51 -DTARGET_MCU_NRF51_16K_S130 -DTARGET_LIKE_MBED -DTARGET_NRF51822 -DDEVICE_PORTINOUT=1 -D__MBED_CMSIS_RTOS_CM -DTOOLCHAIN_object -D__CMSIS_RTOS -DTARGET_MCU_NRF51_16K -DTOOLCHAIN_GCC -DTARGET_CORTEX_M -DARM_MATH_CM0 -DTARGET_UVISOR_UNSUPPORTED -DDEVICE_ANALOGIN=1 -DTARGET_M0 -DTARGET_MCU_NRF51 -DDEVICE_SERIAL=1 -D__MBED__=1 -D__CORTEX_M0 -DDEVICE_I2C=1 -DDEVICE_PORTOUT=1 -DTARGET_RELEASE -DTARGET_NORDIC -DFEATURE_BLE=1 -DTARGET_MCU_NORDIC_16K -DDEVICE_PORTIN=1 -DDEVICE_SLEEP=1 -DTOOLCHAIN_GCC_ARM -DTARGET_MCU_NRF51822 -DDEVICE_SPI=1 -DDEVICE_INTERRUPTIN=1 -DMBED_RTOS_SINGLE_THREAD -DDEVICE_SPISLAVE=1 -DTARGET_RBLAB_BLENANO -DDEVICE_PWMOUT=1 -DTARGET_LIKE_CORTEX_M0 
+CC_SYMBOLS = -DDEVICE_ERROR_PATTERN=1 -DNRF51 -DTARGET_MCU_NRF51_16K_S130 -DTARGET_LIKE_MBED -DTARGET_NRF51822 -DDEVICE_PORTINOUT=1 -D__MBED_CMSIS_RTOS_CM -DTOOLCHAIN_object -D__CMSIS_RTOS -DTARGET_MCU_NRF51_16K -DTOOLCHAIN_GCC -DMBED_BUILD_TIMESTAMP=1471912271.84 -DTARGET_CORTEX_M -DARM_MATH_CM0 -DTARGET_UVISOR_UNSUPPORTED -DDEVICE_ANALOGIN=1 -DTARGET_M0 -DTARGET_MCU_NRF51 -DDEVICE_SERIAL=1 -D__MBED__=1 -D__CORTEX_M0 -DDEVICE_I2C=1 -DDEVICE_PORTOUT=1 -DTARGET_RELEASE -DTARGET_NORDIC -DFEATURE_BLE=1 -DTARGET_MCU_NORDIC_16K -DDEVICE_PORTIN=1 -DDEVICE_SLEEP=1 -DTOOLCHAIN_GCC_ARM -DTARGET_MCU_NRF51822 -DDEVICE_SPI=1 -DDEVICE_INTERRUPTIN=1 -DMBED_RTOS_SINGLE_THREAD -DDEVICE_SPISLAVE=1 -DTARGET_RBLAB_BLENANO -DDEVICE_PWMOUT=1 -DTARGET_LIKE_CORTEX_M0 
 
 LD_FLAGS =-Wl,--gc-sections -Wl,--wrap,main -Wl,--wrap,_malloc_r -Wl,--wrap,_free_r -Wl,--wrap,_realloc_r -mcpu=cortex-m0 -mthumb --specs=nano.specs 
+LD_FLAGS += -u _printf_float -u _scanf_float
+#LD_FLAGS += -Wl,-u,_printf_float,-u,_scanf_float
 LD_SYS_LIBS = -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys
 
 
@@ -70,11 +219,12 @@ else
 endif
 
 
+# -------------------------------------------
+#  				Rules
+# -------------------------------------------
 .PHONY: all lst size
 
 all: $(PROJECT).bin $(PROJECT).hex size
-
-
 
 .asm.o:
 	+@$(call MAKEDIR,$(dir $@))
@@ -122,6 +272,6 @@ merge:
 	$(SREC_CAT) $(SOFTDEVICE) -intel $(PROJECT).hex -intel -o combined.hex -intel --line-length=44
 
 upload:
-	cp combined.hex /Volumes/MBED
+	cp combined.hex /Volumes/MBED 
 
 endif
