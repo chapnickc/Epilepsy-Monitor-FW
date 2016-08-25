@@ -9,7 +9,6 @@
 #include "ble/services/BatteryService.h"
 #include "ble/services/DeviceInformationService.h"
 
-
 #include "TMP006.h"
 #include "MAX30100.h"
 #include "HR_functions.h"
@@ -17,6 +16,8 @@
 #define I2C_SDA     p4
 #define I2C_SCL     p5
 
+
+Serial pc(USBTX, USBRX);                    // for debug
 
 float T = 0.050;                            // Period
 
@@ -129,6 +130,8 @@ void bleInitComplete(BLE::InitializationCompleteCallbackContext *params){
 
 int main(void){
 
+    pc.baud(115200);
+
     led1 = 1;
     Ticker ticker;
     ticker.attach(periodicCallback, 1); // blink LED every second
@@ -153,6 +156,8 @@ int main(void){
             /* Do blocking calls as necessary for sensor polling. */
 			lastBPM = readHrSensor();
             lastTemp = tempSensor.readObjTempC(tmp006_addr);
+
+            pc.printf("IR: %u | Temp (deg C): %f\r\n", (unsigned int) lastBPM, lastTemp);  
 
             batteryLevel++;
             if (batteryLevel == 100){
