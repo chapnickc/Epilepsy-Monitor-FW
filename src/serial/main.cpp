@@ -1,7 +1,9 @@
-
 #include <vector>
 
 #include "mbed.h"
+
+#include "ble/BLE.h"
+
 #include "TMP006.h"
 #include "MAX30100.h"
 #include "HR_functions.h"
@@ -10,9 +12,11 @@
 #define I2C_SCL     p5
 
 
-Serial pc(USBTX, USBRX);                    // for debug
+Serial pc(USBTX, USBRX);    // for debug
 
-float T = 0.050;                            // Sampling period
+//float T = 0.050;            
+float Fs = 125.0;           // Hz 
+float T = 1/Fs;             // Sampling period
 
 /* TMP006 Variables */
 uint8_t tmp006_addr = 0x80;                 // 7-bit address of TMP006 can be 0x40-0x47,  converted to 8-bit address here

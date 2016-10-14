@@ -32,6 +32,11 @@ The first two commands place the output files in a directory entitled ".build"
 in the current working directory. The third command copys the 'combined.hex' to the device. 
 This file that has been merged with the softdevice from the second command.
 
+To clean the directory after the build:
+```
+make clean
+```
+
 
 ## Connecting to the device
 In order to read data from a serial port, connect the TX and RX pins on the BLE Nano to RX and TX on the MK20 (in that order).
