@@ -33,4 +33,15 @@ in the current working directory. The third command copys the 'combined.hex' to 
 This file that has been merged with the softdevice from the second command.
 
 
+## Connecting to the device
+In order to read data from a serial port, connect the TX and RX pins on the BLE Nano to RX and TX on the MK20 (in that order).
+To program the nRF51822 on the BLE Nano, connect the DCLK and DIO pins of the BLE Nano to the DCLK and DIO pins on the MK20.
+DCLK DIO on the BLE Nano -> MK20 DCLK DIO
+
+| BLE Nano Pin  |  MK20 Pin |
+|:-------------:|:---------:|
+|     TX        |   RX      |
+|     RX        |   TX      |
+|     DLCK      |   DCLK    |
+|     DIO       |   DIO     |
 
