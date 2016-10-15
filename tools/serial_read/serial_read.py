@@ -12,7 +12,6 @@ def signal_handler(signal, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
-
 timenow = time.strftime("%Y%m%d_%H%M%S")
 
 baud = 115200
@@ -36,8 +35,3 @@ else:
             line = ser.readline()
             f.write(line)
             print(line.decode('UTF-8').strip())
-            # print(line.strip)
-
-
-
-

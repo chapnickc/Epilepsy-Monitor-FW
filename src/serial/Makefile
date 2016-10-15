@@ -69,7 +69,9 @@ OBJECTS = $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf
 		  $(TMP006_OBJ_DIR)/TMP006.o \
 		  $(MAX30100_OBJ_DIR)/MAX30100.o \
 		  $(HR_FUNCS_OBJ_DIR)/HR_functions.o \
-		  ./main.o
+		  ./main.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services/ble_dfu/ble_dfu.o 
+
 #$(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/ble_radio_notification/ble_radio_notification.o \
 #$(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services/ble_dfu/ble_dfu.o \
 #$(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/common/ble_advdata.o \
@@ -112,6 +114,15 @@ INCLUDE_PATHS = -I../../../lib \
 				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source \
 				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk \
 				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/common \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services/ble_dfu  \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/common \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/device_manager \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/device_manager/config \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager \
+				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_radio_notification \
 				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/device \
 				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf \
 				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/ble_flash \
@@ -153,18 +164,18 @@ INCLUDE_PATHS = -I../../../lib \
 				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM \
 				-I$(TMP006_SRC_PATH) \
 				-I$(MAX30100_SRC_PATH) \
-				-I$(HR_FUNCS_SRC_PATH)
+				-I$(HR_FUNCS_SRC_PATH) \
 
-#-I$(nRF51822_SRC_PATH)/source/btle \
-#-I$(nRF51822_SRC_PATH)/source/btle/custom \
 #-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble \
-#-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_radio_notification \
 #-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services \
 #-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services/ble_dfu \
 #-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/common \
 #-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/device_manager \
 #-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/device_manager/config \
 #-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager \
+#-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_radio_notification \
+#-I$(nRF51822_SRC_PATH)/source/btle \
+#-I$(nRF51822_SRC_PATH)/source/btle/custom \
 
 
 LIBRARY_PATHS = -L$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM 
