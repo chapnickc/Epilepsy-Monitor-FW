@@ -1,9 +1,5 @@
 #include <vector>
-
 #include "mbed.h"
-
-#include "ble/BLE.h"
-
 #include "TMP006.h"
 #include "MAX30100.h"
 #include "HR_functions.h"
@@ -14,7 +10,6 @@
 
 Serial pc(USBTX, USBRX);    // for debug
 
-//float T = 0.050;            
 float Fs = 125.0;           // Hz 
 float T = 1/Fs;             // Sampling period
 

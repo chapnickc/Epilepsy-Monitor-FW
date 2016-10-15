@@ -46,21 +46,7 @@ VPATH = ../../../lib : ..
 
 GCC_BIN = ../../../tools/arm/gcc-arm-none-eabi-4_9-2015q3/bin/
 PROJECT = EM_simulate
-OBJECTS = $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/ble_radio_notification/ble_radio_notification.o \
-		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services/ble_dfu/ble_dfu.o \
-		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/common/ble_advdata.o \
-		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/common/ble_conn_state.o \
-		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/common/ble_srv_common.o \
-		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/device_manager/device_manager_peripheral.o \
-		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/id_manager.o \
-		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/peer_data.o \
-		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/peer_data_storage.o \
-		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/peer_database.o \
-		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/peer_id.o \
-		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/pm_buffer.o \
-		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/pm_mutex.o \
-		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/ble_flash/ble_flash.o \
-		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/delay/nrf_delay.o \
+OBJECTS = $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/delay/nrf_delay.o \
 		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/hal/nrf_ecb.o \
 		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/hal/nrf_nvmc.o \
 		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/pstorage/pstorage.o \
@@ -79,25 +65,38 @@ OBJECTS = $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/ble_rad
 		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/libraries/util/sdk_mapped_flags.o \
 		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/softdevice/common/softdevice_handler/softdevice_handler.o \
 		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/softdevice/common/softdevice_handler/softdevice_handler_appsh.o \
-		  $(nRF51822_OBJ_DIR)/source/nRF5xCharacteristicDescriptorDiscoverer.o \
-		  $(nRF51822_OBJ_DIR)/source/nRF5xDiscoveredCharacteristic.o \
-		  $(nRF51822_OBJ_DIR)/source/nRF5xGap.o \
-		  $(nRF51822_OBJ_DIR)/source/nRF5xGattClient.o \
-		  $(nRF51822_OBJ_DIR)/source/nRF5xGattServer.o \
-		  $(nRF51822_OBJ_DIR)/source/nRF5xServiceDiscovery.o \
-		  $(nRF51822_OBJ_DIR)/source/nRF5xn.o \
-		  $(nRF51822_OBJ_DIR)/source/btle/btle.o \
-		  $(nRF51822_OBJ_DIR)/source/btle/btle_advertising.o \
-		  $(nRF51822_OBJ_DIR)/source/btle/btle_discovery.o \
-		  $(nRF51822_OBJ_DIR)/source/btle/btle_gap.o \
-		  $(nRF51822_OBJ_DIR)/source/btle/btle_security.o \
-		  $(nRF51822_OBJ_DIR)/source/btle/custom/custom_helper.o \
-		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/common/ble_conn_params.o \
+		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/ble_flash/ble_flash.o \
 		  $(TMP006_OBJ_DIR)/TMP006.o \
 		  $(MAX30100_OBJ_DIR)/MAX30100.o \
 		  $(HR_FUNCS_OBJ_DIR)/HR_functions.o \
 		  ./main.o
-
+#$(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/ble_radio_notification/ble_radio_notification.o \
+#$(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services/ble_dfu/ble_dfu.o \
+#$(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/common/ble_advdata.o \
+#$(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/common/ble_conn_state.o \
+#$(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/common/ble_srv_common.o \
+#$(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/device_manager/device_manager_peripheral.o \
+#$(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/id_manager.o \
+#$(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/peer_data.o \
+#$(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/peer_data_storage.o \
+#$(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/peer_database.o \
+#$(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/peer_id.o \
+#$(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/pm_buffer.o \
+#$(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager/pm_mutex.o \
+#$(nRF51822_OBJ_DIR)/source/nRF5xCharacteristicDescriptorDiscoverer.o \
+#$(nRF51822_OBJ_DIR)/source/nRF5xDiscoveredCharacteristic.o \
+#$(nRF51822_OBJ_DIR)/source/nRF5xGap.o \
+#$(nRF51822_OBJ_DIR)/source/nRF5xGattClient.o \
+#$(nRF51822_OBJ_DIR)/source/nRF5xGattServer.o \
+#$(nRF51822_OBJ_DIR)/source/nRF5xServiceDiscovery.o \
+#$(nRF51822_OBJ_DIR)/source/nRF5xn.o \
+#$(nRF51822_OBJ_DIR)/source/btle/btle.o \
+#$(nRF51822_OBJ_DIR)/source/btle/btle_advertising.o \
+#$(nRF51822_OBJ_DIR)/source/btle/btle_discovery.o \
+#$(nRF51822_OBJ_DIR)/source/btle/btle_gap.o \
+#$(nRF51822_OBJ_DIR)/source/btle/btle_security.o \
+#$(nRF51822_OBJ_DIR)/source/btle/custom/custom_helper.o \
+#$(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/common/ble_conn_params.o \
 
 SYS_OBJECTS = $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/cmsis_nvic.o \
 			  $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/mbed_board.o \
@@ -108,21 +107,11 @@ SYS_OBJECTS = $(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM/cmsis_nvic
 INCLUDE_PATHS = -I../../../lib \
 				-I$(nRF51822_SRC_PATH) \
 				-I$(nRF51822_SRC_PATH)/source \
-				-I$(nRF51822_SRC_PATH)/source/btle \
-				-I$(nRF51822_SRC_PATH)/source/btle/custom \
 				-I$(nRF51822_SRC_PATH)/source/common \
 				-I$(nRF51822_SRC_PATH)/nrf51-sdk \
 				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source \
 				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk \
 				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components \
-				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble \
-				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_radio_notification \
-				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services \
-				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services/ble_dfu \
-				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/common \
-				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/device_manager \
-				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/device_manager/config \
-				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager \
 				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/device \
 				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf \
 				-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/ble_flash \
@@ -165,6 +154,18 @@ INCLUDE_PATHS = -I../../../lib \
 				-I$(TMP006_SRC_PATH) \
 				-I$(MAX30100_SRC_PATH) \
 				-I$(HR_FUNCS_SRC_PATH)
+
+#-I$(nRF51822_SRC_PATH)/source/btle \
+#-I$(nRF51822_SRC_PATH)/source/btle/custom \
+#-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble \
+#-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_radio_notification \
+#-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services \
+#-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/ble_services/ble_dfu \
+#-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/common \
+#-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/device_manager \
+#-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/device_manager/config \
+#-I$(nRF51822_SRC_PATH)/nrf51-sdk/source/nordic_sdk/components/ble/peer_manager \
+
 
 LIBRARY_PATHS = -L$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM 
 LIBRARIES = -lmbed 
