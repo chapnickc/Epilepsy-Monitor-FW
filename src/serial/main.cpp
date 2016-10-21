@@ -36,7 +36,7 @@ int main(void){
 
     while (true) {
         led1 = !led1; 
-		hrSensor.readSensor();
+        hrSensor.readSensor();
         pc.printf("%f\n", (float) hrSensor.IR);
         wait(T);
     } 
