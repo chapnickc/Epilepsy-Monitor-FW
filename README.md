@@ -50,3 +50,10 @@ DCLK DIO on the BLE Nano -> MK20 DCLK DIO
 |     DLCK      |   DCLK    |
 |     DIO       |   DIO     |
 
+# Kiel 
+In Kiel v5, the [BLE Nano](https://developer.mbed.org/platforms/RedBearLab-BLE-Nano/) device can be found under
+Nordic Semiconductor -> nRF51 Series ->  nRF51822_xxAA. 
+This version has 256kB flash + 16kB RAM.
+
+ 
+
