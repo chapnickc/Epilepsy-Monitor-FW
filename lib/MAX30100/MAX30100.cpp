@@ -35,5 +35,3 @@ void  MAX30100::readSensor(void){
     IR = (data[0]<<8) | data[1];    // Combine values to get the actual number
     //RED = (data[2]<<8) | data[3];
 };  
-
-

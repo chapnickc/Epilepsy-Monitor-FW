@@ -26,7 +26,6 @@ DigitalOut led1(LED1);
 MAX30100 hrSensor(I2C_SDA, I2C_SCL, max30100_addr);
 TMP006 tempSensor(I2C_SDA, I2C_SCL, tmp006_addr); 
 
-
 int main(void){
     pc.baud(115200);
     led1 = 1;
@@ -41,4 +40,3 @@ int main(void){
         wait(T);
     } 
 }
-
