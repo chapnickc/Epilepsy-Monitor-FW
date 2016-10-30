@@ -11,11 +11,11 @@ void MAX30100::begin(pulseWidth pw, ledCurrent ir, sampleRate sr){
     char data[2];
 
     data[0] = MAX30100_MODE_CONFIG;
-    data[1] = 0x02;                 // HR only mode
+    data[1] = 0x02;                 // 0x02 = HR only, 0x03 = SPO2 Enabled
     i2c.write(addr, data, 2);
     
     data[0] = MAX30100_LED_CONFIG;
-    data[1] = ir;
+    data[1] = (ir << 4) | ir;       // set RED and IR led's
     i2c.write(addr, data, 2);
 
     data[0] = MAX30100_SPO2_CONFIG;
@@ -33,5 +33,5 @@ void  MAX30100::readSensor(void){
     i2c.read(addr, data, 4);  // Read four times from the FIFO
 
     IR = (data[0]<<8) | data[1];    // Combine values to get the actual number
-    //RED = (data[2]<<8) | data[3];
+    RED = (data[2]<<8) | data[3];
 };  

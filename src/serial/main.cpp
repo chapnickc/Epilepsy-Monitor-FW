@@ -20,7 +20,7 @@ uint16_t tempSamples = TMP006_CFG_2SAMPLE;
 /* MAX30100 Variables */
 uint8_t max30100_addr = 0xAE;
 
-DigitalOut led1(LED1);
+//DigitalOut led1(LED1);
 
 /* Instantiate Sensor Objects */
 MAX30100 hrSensor(I2C_SDA, I2C_SCL, max30100_addr);
@@ -28,15 +28,15 @@ TMP006 tempSensor(I2C_SDA, I2C_SCL, tmp006_addr);
 
 int main(void){
     pc.baud(115200);
-    led1 = 1;
+    //led1 = 1;
 
     hrSensor.begin(pw1600, i44, sr100);               // pw1600 allows for 16-bit resolution
     tempSensor.config(tmp006_addr, tempSamples);
 
     while (true) {
-        led1 = !led1; 
+        //led1 = !led1; 
         hrSensor.readSensor();
-        pc.printf("%f\n", (float) hrSensor.IR);
+        pc.printf("%f\n", (float) hrSensor.RED);
         wait(T);
     } 
 }
