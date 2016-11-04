@@ -1,3 +1,6 @@
 .DS_Store
 .hg
 .hgignore
+./*/__pycache__
+m_notes.md
+
