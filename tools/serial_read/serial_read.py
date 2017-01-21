@@ -15,7 +15,7 @@ signal.signal(signal.SIGINT, signal_handler)
 timenow = time.strftime("%Y%m%d_%H%M%S")
 
 baud = 115200
-ports = ['/dev/cu.usbmodem1412',  '/dev/cu.usbmodem1422']
+ports = ['/dev/cu.usbmodem1411','/dev/cu.usbmodem1412',  '/dev/cu.usbmodem1422']
 for port in ports:
     try:
         print("Trying port {}".format(port))

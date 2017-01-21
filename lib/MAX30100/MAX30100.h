@@ -2,7 +2,14 @@
 #define MAX30100_H
 
 #include <stdint.h>
+#include <stdbool.h>
+
 #include "mbed.h"
+
+
+// 8bit I2C address of the MAX30100 
+// with R/W bit set
+#define MAX30100_ADDR           0xAE  
 
 // Registers
 #define MAX30100_INT_STATUS     0x00  // Which interrupts are tripped
@@ -19,14 +26,18 @@
 #define MAX30100_REV_ID         0xFE  // Part revision
 #define MAX30100_PART_ID        0xFF  // Part ID, normally 0x11
 
-#define MAX30100_ADDR           0xAE  // 8bit address from datasheet
+
+typedef enum {
+    HR_mode = 0x02, // IR only
+    SPO2_mode       // RED and IR
+} modeControl_t;
 
 typedef enum{ // This is the same for both LEDs
   pw200,    // 200us pulse
   pw400,    // 400us pulse
   pw800,    // 800us pulse
   pw1600    // 1600us pulse
-}pulseWidth;
+} pulseWitdth_t;
 
 typedef enum{
   sr50,    // 50 samples per second
@@ -37,7 +48,7 @@ typedef enum{
   sr600,   // 600 samples per second
   sr800,   // 800 samples per second
   sr1000   // 1000 samples per second
-}sampleRate;
+} sampleRate_t;
 
 typedef enum{
   i0,    // No current
@@ -47,6 +58,7 @@ typedef enum{
   i14,   // 14.2mA
   i17,   // 17.4mA
   i21,   // 20.8mA
+  i24,   // 24 mA
   i27,   // 27.1mA
   i31,   // 30.6mA
   i34,   // 33.8mA
@@ -55,27 +67,26 @@ typedef enum{
   i44,   // 43.6mA
   i47,   // 46.8mA
   i50    // 50.0mA
-}ledCurrent;
+} ledCurrent_t;
 
 class MAX30100 {
     public:
-        uint16_t IR = 0;      // Last IR reflectance datapoint
-        uint16_t RED = 0;     // Last Red reflectance datapoint
-
-        MAX30100(PinName sda, PinName scl, int addr);
-
-        void  begin(pulseWidth pw = pw1600,     // Longest pulseWidth
-                    ledCurrent ir = i50,      // Highest current
-                    sampleRate sr = sr100);   // 2nd lowest sampleRate
-        
-        void  readSensor(void);       // Updates the values
-
+        MAX30100(PinName sda, PinName scl);
         ~MAX30100();
+
+        void begin(modeControl_t mc = HR_mode,
+                   pulseWitdth_t pw = pw1600,   // Longest pulseWidth
+                   ledCurrent_t ir = i50,       // Highest current
+                   sampleRate_t sr = sr100);   // 2nd lowest sampleRate
+        void startTemperatureSampling();
+        float readTemperature();
+        void readFIFO(void);
+
+        // Last IR and RED reflaceance value
+        uint16_t rawIR, rawRED;      
 
     private:
         I2C i2c;
-        int addr;
 };
 
 #endif
-

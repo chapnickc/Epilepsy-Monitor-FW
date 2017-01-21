@@ -3,4 +3,6 @@
 .hgignore
 ./*/__pycache__
 m_notes.md
+*.build/*
+*.swp
 

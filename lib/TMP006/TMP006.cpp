@@ -1,30 +1,27 @@
 #include "TMP006.h"
  
-TMP006::TMP006(PinName sda, PinName scl, int addr) : 
-    i2c(sda, scl), addr(addr) {
+TMP006::TMP006(PinName sda, PinName scl) : 
+    i2c(sda, scl){
 }
  
 TMP006::~TMP006() {}
 
-void TMP006::config(uint8_t addr, uint16_t samples)
+void TMP006::config(uint16_t samples)
 { /* Configure the sensor with desired samples. */
-    char    data[2];
-
+    char data[2];
     data[0]   = 0x02;
     data[1]   = samples | TMP006_CFG_MODEON | TMP006_CFG_DRDYEN;
-
-    i2c.write(addr, data, 1); 
+    i2c.write(TMP006_ADDR, data, 1); 
 }
 
-int16_t TMP006::readRawDieTemperature(uint8_t addr)
+int16_t TMP006::readRawDieTemperature()
 { /* Get the raw data off the chip. */
-    char reg[1];
+
     char data[2];
+    char reg[] = {TMP006_TAMB};
 
-    reg[0] = TMP006_TAMB;
-
-    i2c.write(addr, reg, 1);
-    i2c.read(addr, data, 2);
+    i2c.write(TMP006_ADDR, data, 1);
+    i2c.read(TMP006_ADDR, data, 2);
 
     int16_t raw = (data[0] << 8) | data[1];
     raw >>= 2;
@@ -32,25 +29,21 @@ int16_t TMP006::readRawDieTemperature(uint8_t addr)
     return raw;
 }
 
-int16_t TMP006::readRawVoltage(uint8_t addr) 
-{ /* Read the raw voltage from the thermopile.*/
-
-    char reg[1];
+int16_t TMP006::readRawVoltage(){ 
+/* Read the raw voltage from the thermopile */
     char data[2];
-    reg[0] = TMP006_VOBJ;
-
-    i2c.write(addr, reg, 1);
-    i2c.read(addr, data, 2);
+    i2c.write(TMP006_ADDR, TMP006_VOBJ, 1);
+    i2c.read(TMP006_ADDR, data, 2);
 
     int16_t raw = (data[0] << 8) | data[1];
     return raw;
 }
 
-double TMP006::readObjTempC(uint8_t addr) 
-{ /* Calculate the object temperature in celcius.*/
+double TMP006::readObjTempC() { 
+/* Calculate the object temperature in celcius.*/
 
-    double Tdie = readRawDieTemperature(addr);
-    double Vobj = readRawVoltage(addr);
+    double Tdie = readRawDieTemperature();
+    double Vobj = readRawVoltage();
 
     Vobj *= 156.25;  // 156.25 nV per LSB
     Vobj /= 1000000000; // nV -> V
@@ -73,24 +66,24 @@ double TMP006::readObjTempC(uint8_t addr)
     return Tobj;
 }
 
-double TMP006::readObjTempF(uint8_t addr) 
-{ /* Calculate the object temperature in fahrenheit. */
-    double Tobj = readObjTempC(addr);
+double TMP006::readObjTempF() { 
+/* Calculate the object temperature in fahrenheit. */
+    double Tobj = readObjTempC();
     Tobj = Tobj * 9.0/5.0 + 32.0; // convert to fahrenheit
     return Tobj;
 }
 
-double TMP006::readDieTempC(uint8_t addr) 
-{ /* Calculate the die temperature in celcius.*/
-    double Tdie = readRawDieTemperature(addr);
+double TMP006::readDieTempC() { 
+/* Calculate the die temperature in celcius.*/
+    double Tdie = readRawDieTemperature();
     Tdie *= 0.03125; // convert to celsius
     return Tdie;
 }
 
 
-double TMP006::readDieTempF(uint8_t addr) 
-{ /* Calculate the die temperature in fahrenheit.*/
-    double Tdie = readDieTempC(addr);
+double TMP006::readDieTempF() { 
+/* Calculate the die temperature in fahrenheit.*/
+    double Tdie = readDieTempC();
     Tdie = Tdie * 9.0/5.0 + 32.0; // convert to fahrenheit
     return Tdie;
 }
