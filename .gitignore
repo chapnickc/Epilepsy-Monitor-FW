@@ -5,4 +5,6 @@
 m_notes.md
 *.build/*
 *.swp
+*.pyc
+tools/arm/*
 

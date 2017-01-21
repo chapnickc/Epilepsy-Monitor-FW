@@ -10,33 +10,35 @@
 
 Serial pc(USBTX, USBRX);    // for debug
 
-float Fs = 125.0;           // Hz 
-float T = 1/Fs;             // Sampling period
 
-/* TMP006 Variables */
-uint8_t tmp006_addr = 0x80;                 // 7-bit address of TMP006 can be 0x40-0x47,  converted to 8-bit address here
+float T = 0.05;             // Sampling period
+
 uint16_t tempSamples = TMP006_CFG_2SAMPLE;
+float MAX_temp, TMP_temp;
 
-/* MAX30100 Variables */
-uint8_t max30100_addr = 0xAE;
+
 
 //DigitalOut led1(LED1);
 
 /* Instantiate Sensor Objects */
-MAX30100 hrSensor(I2C_SDA, I2C_SCL, max30100_addr);
-TMP006 tempSensor(I2C_SDA, I2C_SCL, tmp006_addr); 
+MAX30100 hrSensor(I2C_SDA, I2C_SCL);
+TMP006 tmpSensor(I2C_SDA, I2C_SCL); 
 
 int main(void){
+
     pc.baud(115200);
-    //led1 = 1;
+    pc.printf("starting");
 
-    hrSensor.begin(pw1600, i44, sr100);               // pw1600 allows for 16-bit resolution
-    tempSensor.config(tmp006_addr, tempSamples);
+    hrSensor.begin(HR_mode, pw1600, i44, sr100);               // pw1600 allows for 16-bit resolution
+    tmpSensor.config(TMP006_CFG_2SAMPLE);
 
-    while (true) {
+    while (1) {
         //led1 = !led1; 
-        hrSensor.readSensor();
-        pc.printf("%f\n", (float) hrSensor.IR);
+        hrSensor.readFIFO();
+        MAX_temp = hrSensor.readTemperature();
+        TMP_temp  = tmpSensor.readObjTempC();
+        pc.printf("IR:\t%u\t| MAX_temp:\t%f\t| TMP_temp:\t%f\t", hrSensor.rawIR, MAX_temp,TMP_temp);
+        pc.printf("hooray");
         wait(T);
     } 
 }

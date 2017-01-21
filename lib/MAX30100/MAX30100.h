@@ -84,6 +84,7 @@ class MAX30100 {
 
         // Last IR and RED reflaceance value
         uint16_t rawIR, rawRED;      
+        //float temperature;
 
     private:
         I2C i2c;

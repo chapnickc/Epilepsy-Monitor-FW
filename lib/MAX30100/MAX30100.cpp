@@ -1,6 +1,8 @@
+
 #include "MAX30100.h"
 
-MAX30100::MAX30100(PinName sda, PinName scl): i2c(sda, scl){}
+MAX30100::MAX30100(PinName sda, PinName scl): 
+    i2c(sda, scl){}
 
 MAX30100::~MAX30100() {}
 
@@ -70,9 +72,7 @@ float MAX30100::readTemperature(){
     i2c.write(MAX30100_ADDR, &reg, 1);
     i2c.read(MAX30100_ADDR, &tempFrac, 1);
 
-    return ((float) tempFrac * 0.0625 + (int8_t)tempInt);
+    return  (float) tempFrac * 0.0625 + (int8_t) tempInt;
 
 }
-
-
 
