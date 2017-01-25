@@ -34,9 +34,11 @@ MBED_SRC_PATH 	  = ../../../lib/mbed
 TMP006_SRC_PATH   = ../../../lib/TMP006
 MAX30100_SRC_PATH = ../../../lib/MAX30100
 HR_FUNCS_SRC_PATH = ../../../lib/HR_functions
+MMA8452_SRC_PATH = ../../../lib/MMA8452
 
 nRF51822_OBJ_DIR = ./nRF51822
 MBED_OBJ_DIR 	 = ./mbed
+MMA8452_OBJ_DIR 	 = ./MMA8452
 TMP006_OBJ_DIR   = ./TMP006
 MAX30100_OBJ_DIR = ./MAX30100
 HR_FUNCS_OBJ_DIR = ./HR_functions
@@ -67,6 +69,7 @@ OBJECTS = $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf
 		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/softdevice/common/softdevice_handler/softdevice_handler_appsh.o \
 		  $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/drivers_nrf/ble_flash/ble_flash.o \
 		  $(TMP006_OBJ_DIR)/TMP006.o \
+		  $(MMA8452_OBJ_DIR)/MMA8452.o \
 		  $(MAX30100_OBJ_DIR)/MAX30100.o \
 		  $(HR_FUNCS_OBJ_DIR)/HR_functions.o \
 		  ./main.o \
@@ -136,7 +139,8 @@ INCLUDE_PATHS = -I../../../lib \
 				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM \
 				-I$(TMP006_SRC_PATH) \
 				-I$(MAX30100_SRC_PATH) \
-				-I$(HR_FUNCS_SRC_PATH) 
+				-I$(HR_FUNCS_SRC_PATH) \
+				-I$(MMA8452_SRC_PATH) 
 
 
 LIBRARY_PATHS = -L$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM 

@@ -7,4 +7,5 @@ m_notes.md
 *.swp
 *.pyc
 tools/arm/*
+./*/.build
 
