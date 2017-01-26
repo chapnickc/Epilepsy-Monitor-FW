@@ -3,7 +3,8 @@
 #include "mbed.h"
 #include "TMP006.h"
 #include "MAX30100.h"
-#include "HR_functions.h"
+#include "MMA8452.h"
+
 #include "ble/BLE.h"
 #include "ble/services/HeartRateService.h"
 #include "ble/services/HealthThermometerService.h"
@@ -17,16 +18,18 @@
 Serial      pc(USBTX, USBRX);
 DigitalOut  led1(LED1);
 
-MAX30100 hrSensor(I2C_SDA, I2C_SCL);
-TMP006   tmpSensor(I2C_SDA, I2C_SCL); 
+MAX30100    MAX30100(I2C_SDA, I2C_SCL);
+TMP006      TMP006(I2C_SDA, I2C_SCL); 
+MMA8452     MMA8452(I2C_SDA, I2C_SCL); 
 
-
-
-
-float   T           = 0.05; // sampling period
-float   lastTemp    = 0.0;
-uint8_t lastIR      = 0;
+uint8_t BPM;
+uint16_t RED, IR;
 uint8_t batteryLevel= 0;
+float T = 0.05; // sampling period
+float MAX_temp = 0;
+float TMP_temp = 0;  
+std::vector<int16_t> accel(3);     // array for acceleration data
+
 
 static volatile bool    triggerSensorPolling = false;
 static const char       DEVICE_NAME[]       = "EpilepsyMonitor";
@@ -63,8 +66,8 @@ void bleInitComplete(BLE::InitializationCompleteCallbackContext *params){
 
 
    /*  Reallocate space in memory and instantiate services */
-   hrService       = new HeartRateService(ble, lastIR, HeartRateService::LOCATION_FINGER);
-   thermService    = new HealthThermometerService(ble, lastTemp, HealthThermometerService::LOCATION_BODY);
+   hrService       = new HeartRateService(ble, BPM, HeartRateService::LOCATION_FINGER);
+   thermService    = new HealthThermometerService(ble, TMP_temp, HealthThermometerService::LOCATION_BODY);
    batteryService  = new BatteryService(ble, batteryLevel);
    deviceInfo      = new DeviceInformationService(ble, "ARM", "Model1", "SN1", "hw-rev1", "fw-rev1", "soft-rev1");
 
@@ -83,12 +86,17 @@ void bleInitComplete(BLE::InitializationCompleteCallbackContext *params){
 
 int main(void){
    pc.baud(115200);
+   pc.printf("\nConnected to nRF51...");
 
    Ticker ticker;
    ticker.attach(periodicCallback, 1); // blink LED every second
 
-   hrSensor.begin(HR_mode, pw1600, i44, sr100); // pw1600 allows for 16-bit resolution
-   tmpSensor.config(TMP006_CFG_2SAMPLE);
+   MAX30100.begin(SPO2_mode, pw1600, i11, i24, sr100);               // pw1600 allows for 16-bit resolution
+   MAX30100.startTemperatureSampling();
+   MMA8452.begin();
+   TMP006.config(TMP006_CFG_2SAMPLE);
+
+
 
    BLE& ble = BLE::Instance(BLE::DEFAULT_INSTANCE);
    ble.init(bleInitComplete);
@@ -102,8 +110,22 @@ int main(void){
          triggerSensorPolling = false;
 
          /* Do blocking calls as necessary for sensor polling. */
-         lastIR = hrSensor.rawIR;
-         lastTemp = tmpSensor.readObjTempC();
+         MAX30100.readFIFO();
+         MMA8452.readAcceleration();
+         TMP_temp  = TMP006.readObjTempF();     // need to add temperature attribute to TMP006
+
+
+         /* Get the sensor values */
+         IR = MAX30100.getIR();
+         RED = MAX30100.getRED();
+         MAX_temp = MAX30100.getTemperatureF();
+         accel = MMA8452.getAcceleration(); 
+
+
+         pc.printf("IR: %u | RED: %u | MAX_temp: %f | TMP_temp: %f | XYZ: (%d, %d, %d)\n", IR,RED, MAX_temp,TMP_temp,accel[0],accel[1],accel[2]);
+
+
+
 
          batteryLevel++;
          if (batteryLevel == 100){ 

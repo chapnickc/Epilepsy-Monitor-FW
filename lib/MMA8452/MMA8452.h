@@ -1,34 +1,40 @@
 #ifndef MMA8452_H
 #define MMA8452_H
 
-// 8-bit I2C address with R/W bit set
-#define MMA8452_ADDR           0x3B 
+#include "mbed.h"
+#include <stdint.h>
+#include <stdbool.h>
+#include <vector>
 
-#define MMA8452_STATUS          0x00 
-#define MMA8452_OUT_X_MSB       0x01
-#define MMA8452_OUT_X_LSB       0x02
-#define MMA8452_OUT_Y_MSB       0x03
-#define MMA8452_OUT_Y_LSB       0x04
-#define MMA8452_OUT_Z_MSB       0x05
-#define MMA8452_OUT_Z_LSB       0x06
-#define MMA8452_SYSMOD          0x0B
-#define MMA8452_WHO_AM_I        0x0D
-#define MMA8452_XYZ_DATA_CFG    0x0E
-#define MMA8452_PL_STATUS       0x10
-#define MMA8452_PL_CFG          0x11
-#define MMA8452_PL_COUNT        0x12
-#define MMA8452_PL_BF_ZCOMP     0x13
-#define MMA8452_PL_THS_REG      0x14
-#define MMA8452_FF_MT_CFG       0X15
-#define MMA8452_FF_MT_SRC       0X16
-#define MMA8452_FF_MT_THS       0X17
-#define MMA8452_FF_COUNT        0X18
-#define MMA8452_ASLP_COUNT      0x29
-#define MMA8452_CTRL_REG_1      0x2A
-#define MMA8452_CTRL_REG_2      0x2B
-#define MMA8452_CTRL_REG_3      0x2C
-#define MMA8452_CTRL_REG_4      0x2D
-#define MMA8452_CTRL_REG_5      0x2E
+
+// 8-bit I2C address with R/W bit set
+#define MMA8452_ADDR             0x3B 
+
+#define MMA8452_STATUS           0x00 
+#define MMA8452_OUT_X_MSB        0x01
+#define MMA8452_OUT_X_LSB        0x02
+#define MMA8452_OUT_Y_MSB        0x03
+#define MMA8452_OUT_Y_LSB        0x04
+#define MMA8452_OUT_Z_MSB        0x05
+#define MMA8452_OUT_Z_LSB        0x06
+#define MMA8452_SYSMOD           0x0B
+#define MMA8452_WHO_AM_I         0x0D
+#define MMA8452_XYZ_DATA_CFG     0x0E
+#define MMA8452_PL_STATUS        0x10
+#define MMA8452_PL_CFG           0x11
+#define MMA8452_PL_COUNT         0x12
+#define MMA8452_PL_BF_ZCOMP      0x13
+#define MMA8452_PL_THS_REG       0x14
+#define MMA8452_FF_MT_CFG        0X15
+#define MMA8452_FF_MT_SRC        0X16
+#define MMA8452_FF_MT_THS        0X17
+#define MMA8452_FF_COUNT         0X18
+#define MMA8452_ASLP_COUNT       0x29
+#define MMA8452_CTRL_REG_1       0x2A
+#define MMA8452_CTRL_REG_2       0x2B
+#define MMA8452_CTRL_REG_3       0x2C
+#define MMA8452_CTRL_REG_4       0x2D
+#define MMA8452_CTRL_REG_5       0x2E
 
 // Defined in table 13 of the Freescale PDF
 // (make these names beter)
@@ -63,11 +69,6 @@
 
 
 
-#include <stdint.h>
-#include <stdbool.h>
-
-#include "mbed.h"
-
 
 // 8bit I2C address of the MMA8452 
 // with R/W bit set
@@ -94,13 +95,15 @@ class MMA8452 {
    public:
       MMA8452(PinName sda, PinName scl);
       ~MMA8452();
-      const int16_t* getAcceleration() const;
+      std::vector<int16_t> getAcceleration() const;
       void begin();
-      void processData(char* buffer);
-      void readSensor();
+      void process_data(char* buffer);
+      void readAcceleration();
    private:
       I2C i2c;
-      int16_t accel[3];       // x, y, z acceleration
+      std::vector<int16_t> accel = std::vector<int16_t>(3);       // x, y, z acceleration
+      void write_byte(char reg, char data);
+      //int16_t accel[3];       // x, y, z acceleration
 };
 
 #endif

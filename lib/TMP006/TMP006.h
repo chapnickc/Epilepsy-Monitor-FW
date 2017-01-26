@@ -1,6 +1,6 @@
 #ifndef TMP006_H
 #define TMP006_H
- 
+
 #include "mbed.h"
 #include <stdint.h>
 
@@ -37,21 +37,21 @@
 #define TMP006_CFG_DRDY     0x0080
 
 class TMP006{
-    public:
-        TMP006(PinName sda, PinName scl);
-
-        // Configures sensor, use before reading from it
-        void config(uint16_t samples);
-        int16_t readRawDieTemperature();
-        int16_t readRawVoltage();
-        double readObjTempC();
-        double readObjTempF();
-        double readDieTempC();  
-        double readDieTempF();  
-        ~TMP006();
-
-    private:
-        I2C i2c;
+   public:
+      TMP006(PinName sda, PinName scl);
+      ~TMP006();
+      // Configures sensor, use before reading from it
+      void config(uint16_t samples);
+      int16_t readRawDieTemperature();
+      int16_t readRawVoltage();
+      double readObjTempC();
+      double readObjTempF();
+      double readDieTempC();  
+      double readDieTempF();  
+      double getObjTempF();
+   private:
+      I2C i2c;
+      double Tobj;
 };
 
 #endif

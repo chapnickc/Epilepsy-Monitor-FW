@@ -28,66 +28,69 @@
 
 
 typedef enum {
-    HR_mode = 0x02, // IR only
-    SPO2_mode       // RED and IR
+   HR_mode = 0x02, // IR only
+   SPO2_mode       // RED and IR
 } modeControl_t;
 
 typedef enum{ // This is the same for both LEDs
-  pw200,    // 200us pulse
-  pw400,    // 400us pulse
-  pw800,    // 800us pulse
-  pw1600    // 1600us pulse
+   pw200,    // 200us pulse
+   pw400,    // 400us pulse
+   pw800,    // 800us pulse
+   pw1600    // 1600us pulse
 } pulseWitdth_t;
 
 typedef enum{
-  sr50,    // 50 samples per second
-  sr100,   // 100 samples per second
-  sr167,   // 167 samples per second
-  sr200,   // 200 samples per second
-  sr400,   // 400 samples per second
-  sr600,   // 600 samples per second
-  sr800,   // 800 samples per second
-  sr1000   // 1000 samples per second
+   sr50,    // 50 samples per second
+   sr100,   // 100 samples per second
+   sr167,   // 167 samples per second
+   sr200,   // 200 samples per second
+   sr400,   // 400 samples per second
+   sr600,   // 600 samples per second
+   sr800,   // 800 samples per second
+   sr1000   // 1000 samples per second
 } sampleRate_t;
 
 typedef enum{
-  i0,    // No current
-  i4,    // 4.4mA
-  i8,    // 7.6mA
-  i11,   // 11.0mA
-  i14,   // 14.2mA
-  i17,   // 17.4mA
-  i21,   // 20.8mA
-  i24,   // 24 mA
-  i27,   // 27.1mA
-  i31,   // 30.6mA
-  i34,   // 33.8mA
-  i37,   // 37.0mA
-  i40,   // 40.2mA
-  i44,   // 43.6mA
-  i47,   // 46.8mA
-  i50    // 50.0mA
+   i0,    // No current
+   i4,    // 4.4mA
+   i8,    // 7.6mA
+   i11,   // 11.0mA
+   i14,   // 14.2mA
+   i17,   // 17.4mA
+   i21,   // 20.8mA
+   i24,   // 24 mA
+   i27,   // 27.1mA
+   i31,   // 30.6mA
+   i34,   // 33.8mA
+   i37,   // 37.0mA
+   i40,   // 40.2mA
+   i44,   // 43.6mA
+   i47,   // 46.8mA
+   i50    // 50.0mA
 } ledCurrent_t;
 
 class MAX30100 {
-    public:
-        MAX30100(PinName sda, PinName scl);
-        ~MAX30100();
+   private:
+      I2C i2c;
+      float temperature;
+      uint16_t IR, RED; 
 
-        void begin(modeControl_t mc = HR_mode,
-                   pulseWitdth_t pw = pw1600,   // Longest pulseWidth
-                   ledCurrent_t ir = i50,       // Highest current
-                   sampleRate_t sr = sr100);   // 2nd lowest sampleRate
-        void startTemperatureSampling();
-        float readTemperature();
-        void readFIFO(void);
-
-        // Last IR and RED reflaceance value
-        uint16_t rawIR, rawRED;      
-        //float temperature;
-
-    private:
-        I2C i2c;
+   public:
+      MAX30100(PinName sda, PinName scl);
+      ~MAX30100();
+      float getTemperatureC() const;
+      float getTemperatureF() const;
+      uint16_t getIR() const;
+      uint16_t getRED() const;
+      void begin(modeControl_t mc = HR_mode,
+            pulseWitdth_t pw = pw1600,   // Longest pulseWidth
+            ledCurrent_t red = i24,       
+            ledCurrent_t ir = i24,
+            sampleRate_t sr = sr100);   // 2nd lowest sampleRate
+      void startTemperatureSampling();
+      void readFIFO(void);
+      void readTemperature();
+      void write_byte(char reg, char data);
 };
 
 #endif
