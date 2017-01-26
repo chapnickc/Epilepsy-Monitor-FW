@@ -22,7 +22,7 @@ MAX30100    MAX30100(I2C_SDA, I2C_SCL);
 TMP006      TMP006(I2C_SDA, I2C_SCL); 
 MMA8452     MMA8452(I2C_SDA, I2C_SCL); 
 
-uint8_t BPM;
+uint16_t BPM;
 uint16_t RED, IR;
 uint8_t batteryLevel= 0;
 float T = 0.05; // sampling period
@@ -89,10 +89,10 @@ int main(void){
    pc.printf("\nConnected to nRF51...");
 
    Ticker ticker;
-   ticker.attach(periodicCallback, 1); // blink LED every second
+   ticker.attach(periodicCallback, 2); // blink LED every second
 
    MAX30100.begin(SPO2_mode, pw1600, i11, i24, sr100);               // pw1600 allows for 16-bit resolution
-   MAX30100.startTemperatureSampling();
+   //MAX30100.startTemperatureSampling();
    MMA8452.begin();
    TMP006.config(TMP006_CFG_2SAMPLE);
 
@@ -110,35 +110,43 @@ int main(void){
          triggerSensorPolling = false;
 
          /* Do blocking calls as necessary for sensor polling. */
-         MAX30100.readFIFO();
+         
          MMA8452.readAcceleration();
-         TMP_temp  = TMP006.readObjTempF();     // need to add temperature attribute to TMP006
-
+         TMP006.readObjTempF();     // need to add temperature attribute to TMP006
 
          /* Get the sensor values */
-         IR = MAX30100.getIR();
-         RED = MAX30100.getRED();
-         MAX_temp = MAX30100.getTemperatureF();
+         size_t N = 10;
+         float T = 0.008;
+         std::vector<uint16_t> IR_buffer(N);
+         std::vector<float> TMP_buffer(N);
+
+         for (int i=0; i < N; i++){
+            MAX30100.readFIFO();
+            TMP006.readObjTempF();     // need to add temperature attribute to TMP006
+            IR_buffer[i] = MAX30100.getIR();
+            TMP_buffer[i] = TMP006.getObjTempF();
+            wait_ms(10);
+         }
+
+         // just show the average IR and temperature values for now
+         BPM = std::accumulate(IR_buffer.begin(), IR_buffer.end(), 0.0)/IR_buffer.size();
+         TMP_temp = std::accumulate(TMP_buffer.begin(), TMP_buffer.end(), 0.0)/TMP_buffer.size();
+
+         MMA8452.readAcceleration();        
          accel = MMA8452.getAcceleration(); 
-
-
-         pc.printf("IR: %u | RED: %u | MAX_temp: %f | TMP_temp: %f | XYZ: (%d, %d, %d)\n", IR,RED, MAX_temp,TMP_temp,accel[0],accel[1],accel[2]);
-
-
-
+         
+            //pc.printf("IR: %u | RED: %u | TMP_temp: %f | XYZ: (%d, %d, %d)\n", IR,RED,TMP_temp,accel[0],accel[1],accel[2]);
+         pc.printf("IR: %u | TMP_temp: %f | XYZ: (%d, %d, %d)\n", BPM,TMP_temp,accel[0],accel[1],accel[2]);
 
          batteryLevel++;
          if (batteryLevel == 100){ 
             batteryLevel = 0; 
          }
 
-         hrService->updateHeartRate(lastIR);
-         thermService->updateTemperature(lastTemp);
+         hrService->updateHeartRate(BPM);
+         thermService->updateTemperature(TMP_temp);
          batteryService->updateBatteryLevel(batteryLevel);
 
-         if (DEBUG){
-            pc.printf("IR: %u | Temp (deg C): %f\r\n", lastIR, lastTemp);  
-         }
       } 
       else {
          ble.waitForEvent(); // low power wait for event

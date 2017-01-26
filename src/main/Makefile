@@ -34,6 +34,7 @@ MBED_SRC_PATH 	  = ../../../lib/mbed
 BLE_API_SRC_PATH  = ../../../lib/BLE_API
 TMP006_SRC_PATH   = ../../../lib/TMP006
 MAX30100_SRC_PATH = ../../../lib/MAX30100
+MMA8452_SRC_PATH = ../../../lib/MMA8452
 HR_FUNCS_SRC_PATH = ../../../lib/HR_functions
 
 nRF51822_OBJ_DIR = ./nRF51822
@@ -41,6 +42,7 @@ MBED_OBJ_DIR 	 = ./mbed
 BLE_API_OBJ_DIR  = ./BLE_API
 TMP006_OBJ_DIR   = ./TMP006
 MAX30100_OBJ_DIR = ./MAX30100
+MMA8452_OBJ_DIR = ./MMA8452
 HR_FUNCS_OBJ_DIR = ./HR_functions
 
 
@@ -103,6 +105,7 @@ OBJECTS = $(nRF51822_OBJ_DIR)/nrf51-sdk/source/nordic_sdk/components/ble/ble_rad
 		  $(BLE_API_OBJ_DIR)/source/services/URIBeaconConfigService.o \
 		  $(TMP006_OBJ_DIR)/TMP006.o \
 		  $(MAX30100_OBJ_DIR)/MAX30100.o \
+		  $(MMA8452_OBJ_DIR)/MMA8452.o \
 		  $(HR_FUNCS_OBJ_DIR)/HR_functions.o \
 		  ./main.o
 
@@ -176,6 +179,7 @@ INCLUDE_PATHS = -I../../../lib \
 				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TARGET_NORDIC/TARGET_MCU_NRF51822/TARGET_RBLAB_BLENANO \
 				-I$(MBED_SRC_PATH)/TARGET_RBLAB_BLENANO/TOOLCHAIN_GCC_ARM \
 				-I$(TMP006_SRC_PATH) \
+				-I$(MMA8452_SRC_PATH) \
 				-I$(MAX30100_SRC_PATH) \
 				-I$(HR_FUNCS_SRC_PATH)
 
@@ -270,7 +274,7 @@ DEPS = $(OBJECTS:.o=.d) $(SYS_OBJECTS:.o=.d)
 merge:
 	$(SREC_CAT) $(SOFTDEVICE) -intel $(PROJECT).hex -intel -o combined.hex -intel --line-length=44
 
-upload:
+flash:
 	cp combined.hex /Volumes/MBED 
 
 endif

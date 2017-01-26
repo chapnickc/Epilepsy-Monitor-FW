@@ -32,7 +32,7 @@ int main(void){
    TMP006.config(TMP006_CFG_2SAMPLE);
 
    uint16_t IR, RED;
-     while (1) {
+   while (1) {
       led1 = !led1; 
       MAX30100.readFIFO();
       MMA8452.readAcceleration();
