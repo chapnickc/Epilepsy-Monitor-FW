@@ -44,8 +44,7 @@ int main(void){
       accel = MMA8452.getAcceleration(); 
       TMP_temp  = TMP006.getObjTempF();
 
-      //pc.printf("IR: %u | RED: %u | MAX_temp: %f | TMP_temp: %f | XYZ: (%d, %d, %d)\n", IR,RED, MAX_temp,TMP_temp,accel[0],accel[1],accel[2]);
-      pc.printf("(%u,%u)\n",IR,RED);
+      pc.printf("IR: %u | RED: %u | MAX_temp: %f | TMP_temp: %f | XYZ: (%d, %d, %d)\n", IR,RED, MAX_temp,TMP_temp,accel[0],accel[1],accel[2]);
       wait(T);
    } 
 }

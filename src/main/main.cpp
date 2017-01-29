@@ -44,6 +44,7 @@ static BatteryService              *batteryService;
 static DeviceInformationService    *deviceInfo;
 
 void disconnectionCallback(const Gap::DisconnectionCallbackParams_t *params){
+   pc.printf("Restarting advertising.");
    BLE::Instance(BLE::DEFAULT_INSTANCE).gap().startAdvertising(); // restart advertising
 }
 
@@ -91,9 +92,13 @@ int main(void){
    Ticker ticker;
    ticker.attach(periodicCallback, 2); // blink LED every second
 
+   pc.printf("Starting MAX30100");
    MAX30100.begin(SPO2_mode, pw1600, i11, i24, sr100);               // pw1600 allows for 16-bit resolution
    //MAX30100.startTemperatureSampling();
+   pc.printf("Starting MMA8452");
    MMA8452.begin();
+
+   pc.printf("Starting TMP006");
    TMP006.config(TMP006_CFG_2SAMPLE);
 
 
@@ -118,25 +123,28 @@ int main(void){
          size_t N = 10;
          float T = 0.008;
          std::vector<uint16_t> IR_buffer(N);
+         std::vector<uint16_t> RED_buffer(N);
          std::vector<float> TMP_buffer(N);
 
          for (int i=0; i < N; i++){
             MAX30100.readFIFO();
             TMP006.readObjTempF();     // need to add temperature attribute to TMP006
             IR_buffer[i] = MAX30100.getIR();
+            RED_buffer[i] = MAX30100.getRED();
             TMP_buffer[i] = TMP006.getObjTempF();
             wait_ms(10);
          }
 
          // just show the average IR and temperature values for now
          BPM = std::accumulate(IR_buffer.begin(), IR_buffer.end(), 0.0)/IR_buffer.size();
+         RED = std::accumulate(RED_buffer.begin(), RED_buffer.end(), 0.0)/RED_buffer.size();
          TMP_temp = std::accumulate(TMP_buffer.begin(), TMP_buffer.end(), 0.0)/TMP_buffer.size();
 
          MMA8452.readAcceleration();        
          accel = MMA8452.getAcceleration(); 
          
             //pc.printf("IR: %u | RED: %u | TMP_temp: %f | XYZ: (%d, %d, %d)\n", IR,RED,TMP_temp,accel[0],accel[1],accel[2]);
-         pc.printf("IR: %u | TMP_temp: %f | XYZ: (%d, %d, %d)\n", BPM,TMP_temp,accel[0],accel[1],accel[2]);
+         pc.printf("IR: %u | RED: %u | TMP_temp: %f | XYZ: (%d, %d, %d)\n", BPM,RED, TMP_temp,accel[0],accel[1],accel[2]);
 
          batteryLevel++;
          if (batteryLevel == 100){ 
