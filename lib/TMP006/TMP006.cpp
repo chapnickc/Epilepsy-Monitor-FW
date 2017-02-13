@@ -39,7 +39,7 @@ int16_t TMP006::readRawVoltage(){
    return Vobj;
 }
 
-double TMP006::readObjTempF() { 
+double TMP006::readObjTempC() { 
    /* Calculate the object temperature in celcius.*/
 
    double Tdie = readRawDieTemperature();
@@ -87,6 +87,12 @@ double TMP006::getObjTempF() {
    /* return the obj temperature in fahrenheit.*/
 
    return Tobj * 9.0/5.0 + 32.0; // convert to fahrenheit
+}
+
+double TMP006::getObjTempC() { 
+   /* return the obj temperature in fahrenheit.*/
+
+   return Tobj; // convert to fahrenheit
 }
 
 
