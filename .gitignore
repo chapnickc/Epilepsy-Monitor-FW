@@ -9,4 +9,6 @@ m_notes.md
 tools/arm/*
 .build
 data/
+tools/arm/gcc-arm-none-eabi-4_9-2015q3
+analysis/
 

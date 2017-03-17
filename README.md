@@ -4,12 +4,17 @@
 
 This repository attempts to follow a basic directory tree organization, 
 with libraries in `lib`,  source code in `src`, 
-tests in `test`, etc. 
+
+
 The `analysis` subdirectory currently consists of code for preliminary data processing. 
-The `write` directory contains some TeX code for drawing circuit diagrams. 
-The `tools` directory contains the [GNU ARM Embedded Toolchain](https://launchpad.net/gcc-arm-embedded) needed 
-to compile code for ARM processor used in this project. The toolcahin version is 4.9-2015-q3. 
-I have attempted to use later versions, but have run into some issues. 
+
+The `tools` directory contains the 
+[GNU ARM Embedded Toolchain](https://launchpad.net/gcc-arm-embedded), 
+needed to compile C++ code for the ARM processor used in this project. 
+
+The toolcahin version is 
+version 4.9-2015-q3, 
+
 
 
 ## Source Code

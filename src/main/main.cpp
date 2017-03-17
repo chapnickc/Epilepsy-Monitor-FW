@@ -39,116 +39,116 @@ static DeviceInformationService    *deviceInfo;
 static volatile bool    triggerSensorPolling = false;
 static const char       DEVICE_NAME[]       = "EpilepsyMonitor";
 static const uint16_t   uuid16_list[]       = { GattService::UUID_HEART_RATE_SERVICE, 
-                                                GattService::UUID_HEALTH_THERMOMETER_SERVICE,
-                                                GattService::UUID_BATTERY_SERVICE,
-                                                GattService::UUID_DEVICE_INFORMATION_SERVICE};
+  GattService::UUID_HEALTH_THERMOMETER_SERVICE,
+  GattService::UUID_BATTERY_SERVICE,
+  GattService::UUID_DEVICE_INFORMATION_SERVICE};
 
 void disconnectionCallback(const Gap::DisconnectionCallbackParams_t *params){
-    pc.printf("Restarting advertising.");
-    BLE::Instance(BLE::DEFAULT_INSTANCE).gap().startAdvertising(); // restart advertising
+  pc.printf("Restarting advertising.");
+  BLE::Instance(BLE::DEFAULT_INSTANCE).gap().startAdvertising(); // restart advertising
 }
 
 void periodicCallback(void){
-    /* This function executes in interrupt context, so we trigger
-       "heavy-weight" sensor polling to run in the main thread. */
-    led1 = !led1;   //  blink LED1 while waiting for BLE events
-    triggerSensorPolling = true;
+  /* This function executes in interrupt context, so we trigger
+     "heavy-weight" sensor polling to run in the main thread. */
+  led1 = !led1;   //  blink LED1 while waiting for BLE events
+  triggerSensorPolling = true;
 }
 
 void bleInitComplete(BLE::InitializationCompleteCallbackContext *params){
-    BLE &ble          = params->ble;
-    ble_error_t error = params->error;
+  BLE &ble          = params->ble;
+  ble_error_t error = params->error;
 
-    if (error != BLE_ERROR_NONE) {
-        return;
-    }
-    ble.gap().onDisconnection(disconnectionCallback);
+  if (error != BLE_ERROR_NONE) {
+    return;
+  }
+  ble.gap().onDisconnection(disconnectionCallback);
 
 
-    /*  Reallocate space in memory and instantiate services */
-    hrService       = new HeartRateService(ble, BPM, HeartRateService::LOCATION_FINGER);
-    thermService    = new HealthThermometerService(ble, TMP_temp, HealthThermometerService::LOCATION_BODY);
-    batteryService  = new BatteryService(ble, batteryLevel);
-    deviceInfo      = new DeviceInformationService(ble, "ARM", "Model1", "SN1", "hw-rev1", "fw-rev1", "soft-rev1");
+  /*  Reallocate space in memory and instantiate services */
+  hrService       = new HeartRateService(ble, BPM, HeartRateService::LOCATION_FINGER);
+  thermService    = new HealthThermometerService(ble, TMP_temp, HealthThermometerService::LOCATION_BODY);
+  batteryService  = new BatteryService(ble, batteryLevel);
+  deviceInfo      = new DeviceInformationService(ble, "ARM", "Model1", "SN1", "hw-rev1", "fw-rev1", "soft-rev1");
 
-    /* Setup advertising. */
-    ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::BREDR_NOT_SUPPORTED | GapAdvertisingData::LE_GENERAL_DISCOVERABLE);
-    ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::COMPLETE_LIST_16BIT_SERVICE_IDS, (uint8_t *)uuid16_list, sizeof(uuid16_list));
-    ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::COMPLETE_LOCAL_NAME, (uint8_t *)DEVICE_NAME, sizeof(DEVICE_NAME));
-    ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::GENERIC_HEART_RATE_SENSOR);
-    ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::GENERIC_THERMOMETER);
-    ble.gap().setAdvertisingType(GapAdvertisingParams::ADV_CONNECTABLE_UNDIRECTED);  
-    ble.gap().setAdvertisingInterval(100); /* ms ... increments of 625 us */
-    ble.gap().startAdvertising();
+  /* Setup advertising. */
+  ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::BREDR_NOT_SUPPORTED | GapAdvertisingData::LE_GENERAL_DISCOVERABLE);
+  ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::COMPLETE_LIST_16BIT_SERVICE_IDS, (uint8_t *)uuid16_list, sizeof(uuid16_list));
+  ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::COMPLETE_LOCAL_NAME, (uint8_t *)DEVICE_NAME, sizeof(DEVICE_NAME));
+  ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::GENERIC_HEART_RATE_SENSOR);
+  ble.gap().accumulateAdvertisingPayload(GapAdvertisingData::GENERIC_THERMOMETER);
+  ble.gap().setAdvertisingType(GapAdvertisingParams::ADV_CONNECTABLE_UNDIRECTED);  
+  ble.gap().setAdvertisingInterval(100); /* ms ... increments of 625 us */
+  ble.gap().startAdvertising();
 }
 
 
 int main(void){
-    Ticker ticker;
-    ticker.attach(periodicCallback, 1); // blink LED every second
+  Ticker ticker;
+  ticker.attach(periodicCallback, 1); // blink LED every second
 
-    if (DEBUG){
-        pc.baud(115200);
-        pc.printf("\nConnected to nRF51...");
-        pc.printf("Starting MAX30100");
-        pc.printf("Starting MMA8452");
-        pc.printf("Starting TMP006");
+  if (DEBUG){
+    pc.baud(115200);
+    pc.printf("\nConnected to nRF51...");
+    pc.printf("Starting MAX30100");
+    pc.printf("Starting MMA8452");
+    pc.printf("Starting TMP006");
+  }
+  MAX30100.begin(SPO2_mode, pw1600, i11, i24, sr100);               // pw1600 allows for 16-bit resolution
+  //MAX30100.startTemperatureSampling();
+  MMA8452.begin();
+  TMP006.config(TMP006_CFG_2SAMPLE);
+
+  BLE& ble = BLE::Instance(BLE::DEFAULT_INSTANCE);
+  ble.init(bleInitComplete);
+
+  /* wait the BLE object to initialize*/  
+  while (ble.hasInitialized() == false){};
+
+  while (true) {
+    // check for trigger from periodicCallback()
+    if (triggerSensorPolling && ble.getGapState().connected) {
+      triggerSensorPolling = false;
+
+      /* Do blocking calls as necessary for sensor polling. */
+      size_t N = 50;
+      std::vector<uint16_t> IR_buffer(N);
+      std::vector<uint16_t> RED_buffer(N);
+      std::vector<float> TMP_buffer(N);
+
+      for (int i=0; i < N; i++){
+        MAX30100.readFIFO();
+        TMP006.readObjTempC(); 
+
+        IR_buffer[i] = MAX30100.getIR();
+        RED_buffer[i] = MAX30100.getRED();
+        TMP_buffer[i] = TMP006.getObjTempC();
+        wait_ms(T);
+      }
+
+      // just show the average IR and temperature values for now
+      BPM = std::accumulate(IR_buffer.begin(), IR_buffer.end(), 0.0)/IR_buffer.size();
+      RED = std::accumulate(RED_buffer.begin(), RED_buffer.end(), 0.0)/RED_buffer.size();
+      TMP_temp = std::accumulate(TMP_buffer.begin(), TMP_buffer.end(), 0.0)/TMP_buffer.size();
+
+      MMA8452.readAcceleration();
+      accel = MMA8452.getAcceleration(); 
+
+      //pc.printf("IR: %u | RED: %u | TMP_temp: %f | XYZ: (%d, %d, %d)\n", IR,RED,TMP_temp,accel[0],accel[1],accel[2]);
+      if (DEBUG){
+        pc.printf("IR: %u | RED: %u | TMP_temp: %f | XYZ: (%d, %d, %d)\n", BPM,RED, TMP_temp,accel[0],accel[1],accel[2]);
+      }
+
+      batteryLevel++;
+      if (batteryLevel == 100){ 
+        batteryLevel = 0; 
+      }
+      hrService->updateHeartRate(BPM);
+      thermService->updateTemperature(TMP_temp);
+      batteryService->updateBatteryLevel(batteryLevel);
+    } 
+    else {
+      ble.waitForEvent(); // low power wait for event
     }
-    MAX30100.begin(SPO2_mode, pw1600, i11, i24, sr100);               // pw1600 allows for 16-bit resolution
-    //MAX30100.startTemperatureSampling();
-    MMA8452.begin();
-    TMP006.config(TMP006_CFG_2SAMPLE);
-
-    BLE& ble = BLE::Instance(BLE::DEFAULT_INSTANCE);
-    ble.init(bleInitComplete);
-
-    /* wait the BLE object to initialize*/  
-    while (ble.hasInitialized() == false){};
-
-    while (true) {
-        // check for trigger from periodicCallback()
-        if (triggerSensorPolling && ble.getGapState().connected) {
-            triggerSensorPolling = false;
-
-            /* Do blocking calls as necessary for sensor polling. */
-            size_t N = 50;
-            std::vector<uint16_t> IR_buffer(N);
-            std::vector<uint16_t> RED_buffer(N);
-            std::vector<float> TMP_buffer(N);
-
-            for (int i=0; i < N; i++){
-                MAX30100.readFIFO();
-                TMP006.readObjTempC(); 
-
-                IR_buffer[i] = MAX30100.getIR();
-                RED_buffer[i] = MAX30100.getRED();
-                TMP_buffer[i] = TMP006.getObjTempC();
-                wait_ms(T);
-            }
-
-            // just show the average IR and temperature values for now
-            BPM = std::accumulate(IR_buffer.begin(), IR_buffer.end(), 0.0)/IR_buffer.size();
-            RED = std::accumulate(RED_buffer.begin(), RED_buffer.end(), 0.0)/RED_buffer.size();
-            TMP_temp = std::accumulate(TMP_buffer.begin(), TMP_buffer.end(), 0.0)/TMP_buffer.size();
-
-            MMA8452.readAcceleration();
-            accel = MMA8452.getAcceleration(); 
-
-            //pc.printf("IR: %u | RED: %u | TMP_temp: %f | XYZ: (%d, %d, %d)\n", IR,RED,TMP_temp,accel[0],accel[1],accel[2]);
-            if (DEBUG){
-                pc.printf("IR: %u | RED: %u | TMP_temp: %f | XYZ: (%d, %d, %d)\n", BPM,RED, TMP_temp,accel[0],accel[1],accel[2]);
-            }
-
-            batteryLevel++;
-            if (batteryLevel == 100){ 
-                batteryLevel = 0; 
-            }
-            hrService->updateHeartRate(BPM);
-            thermService->updateTemperature(TMP_temp);
-            batteryService->updateBatteryLevel(batteryLevel);
-        } 
-        else {
-            ble.waitForEvent(); // low power wait for event
-        }
-    }
+  }
 }
